@@ -2,125 +2,59 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visão de Deus | Acesso</title>
+    <title>CMTecnologia | Portal Unificado</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #020205; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        #matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.3; }
-        
-        .glass-box {
-            position: relative; z-index: 10; background: rgba(18, 18, 28, 0.4);
-            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px; padding: 40px; width: 100%; max-width: 400px;
-            text-align: center; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-        }
-
-        .magic-btn {
-            background: linear-gradient(90deg, #2563eb, #7c3aed);
-            width: 100%; padding: 16px; border-radius: 12px; font-weight: bold;
-            color: white; margin-top: 20px; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .magic-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(37,99,235,0.5); }
-
-        .robot-head {
-            width: 80px; height: 60px; background: #1a202c; border: 2px solid #4a5568;
-            border-radius: 16px; margin: 0 auto 20px; position: relative;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 15px rgba(37,99,235,0.2);
-        }
-        .robot-eye {
-            width: 40px; height: 10px; background: #000; border-radius: 5px; overflow: hidden;
-        }
-        .pupil {
-            width: 10px; height: 10px; background: #4ade80; border-radius: 50%;
-            animation: scan 2s infinite alternate;
-        }
-        @keyframes scan { from { transform: translateX(-15px); } to { transform: translateX(15px); } }
-
-        #qr-container { background: white; padding: 10px; border-radius: 12px; margin: 20px auto; width: fit-content; display: none; }
+        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
+        .view { display: none; transition: 0.5s; }
+        .view.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center h-screen">
 
-    <canvas id="matrix-canvas"></canvas>
+    <!-- VIEW 1: LOGIN -->
+    <div id="view-login" class="view active glass p-10 text-center max-w-sm">
+        <h2 class="text-2xl font-bold mb-6">IDENTIFIQUE-SE</h2>
+        <div id="qr-login" class="bg-white p-2 rounded-xl mx-auto mb-4 w-fit"></div>
+        <button onclick="showView('view-onboarding')" class="text-xs text-blue-400 underline">Pular para Demo</button>
+    </div>
 
-    <div class="glass-box">
-        <div class="robot-head">
-            <div class="robot-eye"><div class="pupil"></div></div>
-        </div>
-
-        <h2 class="text-2xl font-bold mb-2 font-[Orbitron]">IDENTIFIQUE-SE</h2>
-        <p class="text-xs text-gray-400 mb-6">Acesso Seguro via WhatsApp</p>
-
-        <!-- Opção PC: QR Code -->
-        <div id="desktop-view" class="hidden">
-            <p class="text-sm mb-2">Escaneie para entrar:</p>
-            <div id="qr-container"></div>
-            <p class="text-[10px] text-gray-500 mt-2">O robô te enviará o link de acesso.</p>
-        </div>
-
-        <!-- Opção Mobile: Botão -->
-        <div id="mobile-view" class="hidden">
-            <a id="whatsapp-link" href="#" class="magic-btn">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                Pegar Acesso no WhatsApp
-            </a>
+    <!-- VIEW 2: ONBOARDING -->
+    <div id="view-onboarding" class="view glass p-10 text-center max-w-4xl">
+        <h2 class="text-3xl font-bold mb-10">Escolha seu Robô</h2>
+        <div class="grid grid-cols-2 gap-6">
+            <div onclick="showView('view-dash')" class="glass p-6 cursor-pointer hover:border-blue-500">
+                <h3 class="font-bold">Visão de Deus</h3>
+                <p class="text-xs text-gray-400">Gestão de Estoque</p>
+            </div>
+            <div class="glass p-6 opacity-50">
+                <h3 class="font-bold">Em Breve</h3>
+                <p class="text-xs text-gray-400">Novas Automações</p>
+            </div>
         </div>
     </div>
 
+    <!-- VIEW 3: DASHBOARD -->
+    <div id="view-dash" class="view glass p-10 w-full h-[80vh] mx-10">
+        <h2 class="text-2xl font-bold mb-6">Dashboard Master</h2>
+        <p class="text-green-400">Sistema 100% Operacional (Centurião)</p>
+    </div>
+
     <script>
-        // === CONFIGURAÇÃO ===
-        const WHATSAPP_NUMBER = "351964977047";
-        const MESSAGE_TEXT = "Quero acessar o Portal Visão de Deus";
-        
-        // BYPASS: Link leva direto ao Onboarding para demonstração
-        const LINK = "onboarding.html"; 
-
-        // === DETECÇÃO DE DISPOSITIVO ===
-        const isMobile = /Android|iPhone/i.test(navigator.userAgent);
-        const qrContainer = document.getElementById('qr-container');
-        const desktopView = document.getElementById('desktop-view');
-        const mobileView = document.getElementById('mobile-view');
-        const whatsappLink = document.getElementById('whatsapp-link');
-
-        if (isMobile) {
-            mobileView.classList.remove('hidden');
-            whatsappLink.href = LINK;
-            whatsappLink.innerText = "Entrar no Sistema (Demo)";
-        } else {
-            desktopView.classList.remove('hidden');
-            // No Desktop, mantemos o QR Code fake ou redirecionamos click
-            qrContainer.style.display = "block";
-            new QRCode(qrContainer, {
-                text: window.location.origin + "/" + LINK,
-                width: 128,
-                height: 128
-            });
-            // Adicionar clique no QR Code para facilitar teste
-            qrContainer.onclick = () => window.location.href = LINK;
-            qrContainer.style.cursor = "pointer";
-            qrContainer.title = "Clique para entrar";
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
         }
 
-        // === MATRIX EFFECT (Resumido) ===
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const drops = Array(Math.floor(canvas.width / 14)).fill(1);
-        function draw() {
-            ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = '#3b82f6'; ctx.font = '14px monospace';
-            drops.forEach((y, i) => {
-                ctx.fillText('01'[Math.floor(Math.random()*2)], i*14, y*14);
-                if(y*14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        }
-        setInterval(draw, 33);
+        new QRCode(document.getElementById("qr-login"), {
+            text: "https://wa.me/351964977047",
+            width: 150,
+            height: 150
+        });
     </script>
 </body>
 </html>
