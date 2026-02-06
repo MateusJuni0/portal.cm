@@ -60,18 +60,35 @@
             <button onclick="initAuth()" class="btn-luxe">
                 Request Entry
             </button>
+            
+            <div class="mt-10">
+                <a href="#" onclick="showView('view-onboarding')" class="text-[10px] text-zinc-600 hover:text-indigo-400 uppercase tracking-[0.3em] font-black transition-colors">Bypass System Portal →</a>
+            </div>
         </div>
 
-        <!-- TELA 2: OTP (ESTILO IPHONE) -->
-        <div id="otp-card" class="glass-panel hidden">
-            <h2 class="text-2xl font-black mb-10 tracking-tight">Security Check</h2>
-            <div class="flex justify-center mb-12">
-                <input type="text" maxlength="1" class="code-input" autofocus>
-                <input type="text" maxlength="1" class="code-input">
-                <input type="text" maxlength="1" class="code-input">
-                <input type="text" maxlength="1" class="code-input">
+        <!-- TELA 2: ONBOARDING SPATIAL -->
+        <div id="view-onboarding" class="view w-full h-full flex-col items-center justify-center p-6 hidden">
+            <h2 class="text-4xl lg:text-6xl font-black mb-4 tracking-tighter text-center">Qual cérebro ativar?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mt-10">
+                <div onclick="showView('view-dashboard')" class="glass-panel p-10 cursor-pointer group hover:bg-indigo-600/10 transition-all">
+                    <div class="text-4xl mb-4">👁️</div>
+                    <h3 class="text-xl font-black uppercase">Visão de Deus</h3>
+                </div>
+                <div class="glass-panel p-10 opacity-20 grayscale cursor-not-allowed">
+                    <div class="text-4xl mb-4">🧠</div>
+                    <h3 class="text-xl font-black uppercase">Cofre Central</h3>
+                </div>
             </div>
-            <p class="text-zinc-600 text-xs font-medium">O código foi enviado para o seu WhatsApp oficial.</p>
+        </div>
+
+        <!-- TELA 3: DASHBOARD BENTO -->
+        <div id="view-dashboard" class="view w-full h-full flex-col p-10 hidden">
+             <h1 class="text-4xl font-black tracking-tighter mb-10 text-white">STATUS: <span class="text-indigo-500">SOVEREIGN</span></h1>
+             <div class="grid grid-cols-3 gap-6 flex-1">
+                 <div class="glass-panel p-10 col-span-2 text-white"> <span class="text-xs font-bold text-zinc-500">RECEITA REAL</span> <h2 class="text-6xl font-black">€ 0,00</h2> </div>
+                 <div class="glass-panel p-10 text-white"> <span class="text-xs font-bold text-zinc-500">LÚCIO STATUS</span> <h2 class="text-2xl font-black text-green-400">OPERATIONAL</h2> </div>
+             </div>
+             <button onclick="showView('login-card')" class="mt-10 text-xs text-zinc-600 uppercase tracking-widest">Log out</button>
         </div>
     </div>
 
