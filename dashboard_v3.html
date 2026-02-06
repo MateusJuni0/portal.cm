@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <title>Visão de Deus | Dashboard V3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body {
+            background-color: #0d0e12; /* Fundo base da referência */
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Glass */
+        .sidebar {
+            width: 90px;
+            background: #1a1b23;
+            border-right: 1px solid #2a2b36;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            z-index: 50;
+        }
+
+        .nav-item {
+            width: 50px; height: 50px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: #8da3b6;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            background: #6366f1; /* Roxo Indigo */
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
+        }
+        .nav-item:hover:not(.active) {
+            background: #252630;
+            color: white;
+        }
+
+        /* Área Principal */
+        .main {
+            margin-left: 90px;
+            padding: 40px;
+        }
+
+        /* Cards Estilo Referência */
+        .card {
+            background: #15161c;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid #23242e;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            border-color: #3b3d4d;
+            transform: translateY(-5px);
+        }
+
+        /* Botão Principal */
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: scale(1.02);
+        }
+
+        /* Tabela Limpa */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        th { color: #6b7280; font-size: 12px; font-weight: 600; text-transform: uppercase; padding: 0 16px; text-align: left; }
+        td { background: #1a1b23; padding: 16px; first-child: border-top-left-radius: 12px; border-bottom-left-radius: 12px; last-child: border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+        tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+        tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+        
+        /* Status Badge */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-green { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+        .badge-red { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Logo -->
+        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl mb-10 flex items-center justify-center font-bold text-white text-lg">V</div>
+        
+        <div class="nav-item active">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+        </div>
+        <div class="nav-item">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+        </div>
+        <div class="nav-item">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        </div>
+        
+        <div class="mt-auto nav-item">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h1 class="text-3xl font-bold text-white mb-2">Visão Geral</h1>
+                <p class="text-gray-400 text-sm">Olá, Dante. Tudo sob controle hoje.</p>
+            </div>
+            <div class="flex gap-3">
+                <button class="bg-[#1a1b23] text-white px-4 py-2 rounded-xl text-sm font-medium border border-[#2a2b36] hover:bg-[#252630]">
+                    Filtros
+                </button>
+                <button class="btn-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Novo Item
+                </button>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-4 gap-6 mb-10">
+            <!-- Total Items -->
+            <div class="card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wide">Total Itens</p>
+                    <h3 class="text-2xl font-bold text-white">1,248</h3>
+                </div>
+            </div>
+
+            <!-- Críticos -->
+            <div class="card flex items-center gap-4 border-l-4 border-red-500">
+                <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wide">Críticos</p>
+                    <h3 class="text-2xl font-bold text-white">5</h3>
+                </div>
+            </div>
+
+            <!-- Gasto -->
+            <div class="card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center text-green-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wide">Gasto Mensal</p>
+                    <h3 class="text-2xl font-bold text-white">€ 420</h3>
+                </div>
+            </div>
+
+            <!-- Economia -->
+            <div class="card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wide">Economia</p>
+                    <h3 class="text-2xl font-bold text-white">€ 45</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid (Graph + Table) -->
+        <div class="grid grid-cols-3 gap-6">
+            
+            <!-- Graph Section -->
+            <div class="card col-span-2">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg">Histórico de Consumo</h3>
+                    <select class="bg-[#0d0e12] text-xs text-gray-400 px-3 py-1 rounded-lg border border-[#2a2b36] outline-none">
+                        <option>Últimos 6 meses</option>
+                        <option>Este Ano</option>
+                    </select>
+                </div>
+                <div class="h-64 w-full">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity / Notifications -->
+            <div class="card">
+                <h3 class="font-bold text-lg mb-6">Atividade Recente</h3>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gray-800 flex-shrink-0 flex items-center justify-center">🤖</div>
+                        <div>
+                            <p class="text-sm font-medium text-white">Scan Automático</p>
+                            <p class="text-xs text-gray-500">Detectou 3 novos itens na despensa.</p>
+                            <span class="text-[10px] text-gray-600 mt-1 block">Há 10 min</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gray-800 flex-shrink-0 flex items-center justify-center">🛒</div>
+                        <div>
+                            <p class="text-sm font-medium text-white">Compra Agendada</p>
+                            <p class="text-xs text-gray-500">Leite e Ovos adicionados ao carrinho.</p>
+                            <span class="text-[10px] text-gray-600 mt-1 block">Há 2 horas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Products Table -->
+        <div class="mt-10">
+            <h3 class="font-bold text-lg mb-4">Inventário</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Categoria</th>
+                        <th>Quantidade</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-gray-700 bg-cover" style="background-image: url('https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100')"></div>
+                            <div>
+                                <div class="font-bold text-sm">Arroz Basmati</div>
+                                <div class="text-xs text-gray-500">Cigano</div>
+                            </div>
+                        </td>
+                        <td class="text-sm text-gray-400">Grãos</td>
+                        <td class="text-sm font-bold">3 kg</td>
+                        <td><span class="badge badge-green">Em Dia</span></td>
+                        <td><button class="text-gray-500 hover:text-white">...</button></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-gray-700 bg-cover" style="background-image: url('https://images.unsplash.com/photo-1474979266404-7caddbcd1bef?w=100')"></div>
+                            <div>
+                                <div class="font-bold text-sm">Azeite Virgem</div>
+                                <div class="text-xs text-gray-500">Gallo</div>
+                            </div>
+                        </td>
+                        <td class="text-sm text-gray-400">Óleos</td>
+                        <td class="text-sm font-bold text-red-400">200 ml</td>
+                        <td><span class="badge badge-red">Baixo</span></td>
+                        <td><button class="text-indigo-400 hover:text-indigo-300 text-xs font-bold">Comprar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Chart JS Config
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Entradas',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: '#6366f1',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#2a2b36' }, ticks: { color: '#6b7280' } },
+                    x: { grid: { display: false }, ticks: { color: '#6b7280' } }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
