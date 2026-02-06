@@ -2,59 +2,84 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <title>CMTecnologia | Portal Unificado</title>
+    <title>CMTecnologia | Portal Visão de Deus v1.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
-        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
-        .view { display: none; transition: 0.5s; }
-        .view.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        :root { --bg: #030303; --card: #0d0d0f; --accent: #6366f1; --border: #1f1f23; }
+        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        .glass { background: rgba(255,255,255,0.02); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 24px; }
+        .view { display: none; opacity: 0; transform: scale(0.98); transition: all 0.5s ease; }
+        .view.active { display: block; opacity: 1; transform: scale(1); }
+        .btn-lorde { background: var(--accent); color: white; font-weight: 700; padding: 12px 24px; border-radius: 12px; transition: 0.3s; }
+        .btn-lorde:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen">
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
 
-    <!-- VIEW 1: LOGIN -->
+    <!-- VIEW 1: LOGIN MATRIX -->
     <div id="view-login" class="view active glass p-10 text-center max-w-sm">
-        <h2 class="text-2xl font-bold mb-6">IDENTIFIQUE-SE</h2>
-        <div id="qr-login" class="bg-white p-2 rounded-xl mx-auto mb-4 w-fit"></div>
-        <button onclick="showView('view-onboarding')" class="text-xs text-blue-400 underline">Pular para Demo</button>
+        <div class="w-20 h-20 bg-indigo-600 rounded-2xl mx-auto mb-8 flex items-center justify-center text-4xl shadow-2xl">🤖</div>
+        <h2 class="text-2xl font-bold mb-2">MODO LORDE</h2>
+        <p class="text-zinc-500 text-sm mb-8">Efetue login via WhatsApp para acessar o portal administrativo.</p>
+        <button onclick="showView('view-onboarding')" class="btn-lorde w-full">Acessar com QR Code</button>
     </div>
 
-    <!-- VIEW 2: ONBOARDING -->
-    <div id="view-onboarding" class="view glass p-10 text-center max-w-4xl">
-        <h2 class="text-3xl font-bold mb-10">Escolha seu Robô</h2>
-        <div class="grid grid-cols-2 gap-6">
-            <div onclick="showView('view-dash')" class="glass p-6 cursor-pointer hover:border-blue-500">
-                <h3 class="font-bold">Visão de Deus</h3>
-                <p class="text-xs text-gray-400">Gestão de Estoque</p>
+    <!-- VIEW 2: ONBOARDING (NETFLIX STYLE) -->
+    <div id="view-onboarding" class="view glass p-12 w-full max-w-6xl">
+        <h2 class="text-4xl font-bold mb-10 text-center">O que vamos escalar hoje?</h2>
+        <div class="grid grid-cols-3 gap-8">
+            <div onclick="showView('view-dashboard')" class="glass p-8 cursor-pointer border-indigo-500/50 bg-indigo-500/5">
+                <div class="text-4xl mb-4">👁️</div>
+                <h3 class="text-xl font-bold mb-2">Visão de Deus</h3>
+                <p class="text-zinc-400 text-sm">Gestão de estoque autônoma via IA Vision.</p>
             </div>
-            <div class="glass p-6 opacity-50">
-                <h3 class="font-bold">Em Breve</h3>
-                <p class="text-xs text-gray-400">Novas Automações</p>
+            <div class="glass p-8 opacity-40 grayscale">
+                <div class="text-4xl mb-4">🩺</div>
+                <h3 class="text-xl font-bold mb-2">Clínica Pro</h3>
+                <p class="text-zinc-400 text-sm">Agendamento e retorno automático de pacientes.</p>
+            </div>
+            <div class="glass p-8 opacity-40 grayscale">
+                <div class="text-4xl mb-4">🍷</div>
+                <h3 class="text-xl font-bold mb-2">Wine Tracker</h3>
+                <p class="text-zinc-400 text-sm">Monitoramento de adegas e safras raras.</p>
             </div>
         </div>
     </div>
 
-    <!-- VIEW 3: DASHBOARD -->
-    <div id="view-dash" class="view glass p-10 w-full h-[80vh] mx-10">
-        <h2 class="text-2xl font-bold mb-6">Dashboard Master</h2>
-        <p class="text-green-400">Sistema 100% Operacional (Centurião)</p>
+    <!-- VIEW 3: DASHBOARD FINAL -->
+    <div id="view-dashboard" class="view w-full max-w-7xl h-[85vh] flex flex-col">
+         <!-- Aqui entra o Dashboard V4.1 completo com o Widget do Alfred integrado -->
+         <h1 class="text-3xl font-bold mb-6">Portal Administrativo (Live)</h1>
+         <div class="grid grid-cols-4 gap-6 flex-1">
+             <div class="col-span-3 glass p-8 overflow-y-auto">
+                 <h2 class="text-xl font-bold mb-4">Relatório de Operações</h2>
+                 <div class="bg-zinc-900 rounded-xl p-4 text-green-400 font-mono text-xs">
+                     [LÚCIO]: Monitorando 72.62.179.56...<br>
+                     [ALFRED]: 5 faturas processadas no Cofre hoje.<br>
+                     [DANTE]: 50 leads minerados em Lisboa.
+                 </div>
+             </div>
+             <div class="glass p-6 flex flex-col bg-zinc-900/50">
+                 <div class="font-bold text-indigo-400 mb-4 flex items-center gap-2">🤖 Alfred Gestor</div>
+                 <div class="flex-1 text-xs text-zinc-400 italic">"Chefe, notei que o azeite está no fim e encontrei 3 fornecedores com preço 15% menor. Quer que eu faça o pedido?"</div>
+                 <button class="btn-lorde mt-4 text-xs">Autorizar Alfred</button>
+             </div>
+         </div>
     </div>
 
     <script>
-        function showView(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+        function showView(v) {
+            document.querySelectorAll('.view').forEach(x => {
+                x.classList.remove('active');
+                setTimeout(() => x.style.display = 'none', 100);
+            });
+            const target = document.getElementById(v);
+            setTimeout(() => {
+                target.style.display = 'block';
+                setTimeout(() => target.classList.add('active'), 50);
+            }, 150);
         }
-
-        new QRCode(document.getElementById("qr-login"), {
-            text: "https://wa.me/351964977047",
-            width: 150,
-            height: 150
-        });
     </script>
 </body>
 </html>
