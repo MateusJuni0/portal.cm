@@ -74,9 +74,11 @@
 
     <script>
         // === CONFIGURAÇÃO ===
-        const WHATSAPP_NUMBER = "351964977047"; // SEU NÚMERO AQUI (DANTE/LÚCIO PRECISAM ALTERAR)
+        const WHATSAPP_NUMBER = "351964977047";
         const MESSAGE_TEXT = "Quero acessar o Portal Visão de Deus";
-        const LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(MESSAGE_TEXT)}`;
+        
+        // BYPASS: Link leva direto ao Onboarding para demonstração
+        const LINK = "onboarding.html"; 
 
         // === DETECÇÃO DE DISPOSITIVO ===
         const isMobile = /Android|iPhone/i.test(navigator.userAgent);
@@ -88,17 +90,23 @@
         if (isMobile) {
             mobileView.classList.remove('hidden');
             whatsappLink.href = LINK;
+            whatsappLink.innerText = "Entrar no Sistema (Demo)";
         } else {
             desktopView.classList.remove('hidden');
+            // No Desktop, mantemos o QR Code fake ou redirecionamos click
             qrContainer.style.display = "block";
             new QRCode(qrContainer, {
-                text: LINK,
+                text: window.location.origin + "/" + LINK,
                 width: 128,
                 height: 128
             });
+            // Adicionar clique no QR Code para facilitar teste
+            qrContainer.onclick = () => window.location.href = LINK;
+            qrContainer.style.cursor = "pointer";
+            qrContainer.title = "Clique para entrar";
         }
 
-        // === MATRIX EFFECT (Resumido para economizar espaço) ===
+        // === MATRIX EFFECT (Resumido) ===
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
