@@ -252,20 +252,24 @@
             <p class="text-xs text-blue-400 uppercase tracking-widest">Protocolo Visão de Deus v2.0</p>
         </div>
 
-        <form onsubmit="event.preventDefault(); alert('Conectando ao N8N...');">
+        <form id="loginForm">
             <div class="input-group">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">📱</span>
-                <input type="tel" id="phoneInput" class="magic-input" placeholder="+351 912 345 678" autocomplete="off">
+                <input type="tel" id="phoneInput" class="magic-input" placeholder="5511999999999" autocomplete="off" required>
             </div>
 
-            <button type="submit" class="magic-btn">
+            <button type="submit" id="submitBtn" class="magic-btn">
                 Acessar Sistema
             </button>
+            <p id="statusMsg" class="text-xs text-center mt-4 text-gray-500 h-4"></p>
         </form>
 
     </div>
 
     <script>
+        // === CONFIGURAÇÃO ===
+        const N8N_WEBHOOK_URL = 'https://webhook.obraoliveira.pt/webhook/visao-deus/login';
+
         // === 1. MATRIX RAIN EFFECT ===
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
@@ -282,7 +286,6 @@
             ctx.fillStyle = 'rgba(2, 2, 5, 0.05)'; // Trail effect
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#0F0'; // Green original Matrix? No, let's go Blue/Cyan for "Visão de Deus"
             ctx.fillStyle = '#3b82f6'; // Azul moderno
             ctx.font = fontSize + 'px monospace';
 
@@ -306,15 +309,57 @@
         // === 2. ROBOT INTERACTION LOGIC ===
         const loginBox = document.getElementById('loginBox');
         const phoneInput = document.getElementById('phoneInput');
+        const loginForm = document.getElementById('loginForm');
+        const statusMsg = document.getElementById('statusMsg');
+        const submitBtn = document.getElementById('submitBtn');
 
-        // Quando o usuário clica para digitar, o robô entra em modo "SCANNING"
-        phoneInput.addEventListener('focus', () => {
-            loginBox.classList.add('typing');
-        });
+        // Estados do Robô
+        phoneInput.addEventListener('focus', () => loginBox.classList.add('typing'));
+        phoneInput.addEventListener('blur', () => loginBox.classList.remove('typing'));
 
-        // Quando sai, volta ao normal (ou hover se o mouse estiver em cima)
-        phoneInput.addEventListener('blur', () => {
-            loginBox.classList.remove('typing');
+        // === 3. LOGIN LOGIC (CONNECT TO N8N) ===
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const phone = phoneInput.value.replace(/\D/g, ''); // Remove não-números
+            
+            if (phone.length < 10) {
+                statusMsg.textContent = "Número inválido. Use DDD + Número.";
+                statusMsg.style.color = "#ef4444";
+                return;
+            }
+
+            // UI Loading
+            submitBtn.innerHTML = "Autenticando...";
+            submitBtn.style.opacity = "0.7";
+            statusMsg.textContent = "Conectando ao Guardião...";
+            statusMsg.style.color = "#3b82f6";
+
+            try {
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phone, origin: 'web_portal' })
+                });
+
+                if (response.ok) {
+                    statusMsg.textContent = "Acesso solicitado! Verifique seu WhatsApp.";
+                    statusMsg.style.color = "#4ade80"; // Green
+                    submitBtn.innerHTML = "Verifique o WhatsApp";
+                    
+                    // Efeito de sucesso no robô (olho verde fixo)
+                    document.querySelector('.robot-pupil').style.background = '#4ade80';
+                    document.querySelector('.robot-pupil').style.boxShadow = '0 0 20px #4ade80';
+                } else {
+                    throw new Error('Erro no servidor');
+                }
+            } catch (error) {
+                console.error(error);
+                statusMsg.textContent = "Erro de conexão. O N8N está ativo?";
+                statusMsg.style.color = "#ef4444";
+                submitBtn.innerHTML = "Tentar Novamente";
+                submitBtn.style.opacity = "1";
+            }
         });
 
     </script>
