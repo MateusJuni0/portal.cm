@@ -17,3 +17,10 @@ temp_lucio_config_v2.yaml
 memory/
 *.sh
 *.ps1
+lucio_config_COMPLETO.yaml
+temp_config_final.yaml
+temp_lucio_config.yaml
+TOOLS_LUCIO_SEM_ANTHROPIC.md
+transcrever_audio.js
+TOOLS.md
+*.json
