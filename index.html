@@ -2,125 +2,192 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMTecnologia | Sovereign Sentinel Optimized</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CMTecnologia | Sovereign Portal v5.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;800&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; cursor: auto; }
-        #canvas-container { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        :root { --accent: #6366f1; --bg: #000000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
         
-        .interface-layer {
-            position: relative; z-index: 100; 
-            width: 100vw; height: 100vh; 
+        body { 
+            background: var(--bg); 
+            color: #fff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow: hidden; 
+            height: 100vh; width: 100vw;
             display: flex; align-items: center; justify-content: center;
-            pointer-events: none;
         }
 
-        .glass-panel {
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px;
-            padding: 60px; text-align: center; pointer-events: auto;
-            box-shadow: 0 0 100px rgba(0, 0, 0, 1);
-            display: flex; flex-direction: column; align-items: center;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        /* DIGITAL RAIN / ATMOSPHERE */
+        #bg-canvas { position: fixed; inset: 0; z-index: 0; opacity: 0.4; }
+        .ambient-glow {
+            position: fixed; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, rgba(0,0,0,0) 80%);
+            z-index: 1; pointer-events: none;
         }
 
-        h1 { font-family: 'Orbitron', sans-serif; letter-spacing: 10px; text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
-
-        .btn-sovereign {
-            background: #fff; color: #000; padding: 18px 50px; border-radius: 12px;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 3px; font-size: 11px;
-            cursor: pointer; transition: 0.3s; border: none; pointer-events: auto;
-            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        /* SOVEREIGN VIEWS */
+        .view-container { 
+            position: relative; z-index: 10; 
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
         }
-        .btn-sovereign:hover { background: #6366f1; color: #fff; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5); }
-        .btn-sovereign:active { transform: scale(0.95); }
+        
+        .panel { 
+            position: absolute; display: none; opacity: 0; 
+            transform: scale(0.95) translateY(30px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            width: 90%; max-width: 450px;
+        }
+        .panel.active { display: flex; flex-direction: column; opacity: 1; transform: scale(1) translateY(0); }
 
-        .status-tag { color: #333; font-size: 9px; font-weight: 800; letter-spacing: 4px; margin-top: 20px; }
+        /* GLASSMORPHISM 3.0 */
+        .glass {
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            padding: 50px 40px;
+            box-shadow: 0 50px 100px rgba(0,0,0,1);
+            text-align: center;
+        }
+
+        /* THE SENTINEL SCANNER (ROBO) */
+        .scanner-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, #6366f1, transparent);
+            box-shadow: 0 0 15px #6366f1;
+            animation: scanMove 3s infinite ease-in-out;
+            opacity: 0.5; z-index: 5;
+        }
+        @keyframes scanMove { 0% { top: 10%; } 50% { top: 90%; } 100% { top: 10%; } }
+
+        /* BUTTONS */
+        .btn-luxe {
+            background: #fff; color: #000;
+            padding: 20px 40px; border-radius: 20px;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 4px;
+            font-family: 'Orbitron', sans-serif; font-size: 11px;
+            transition: all 0.4s; border: none;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+        .btn-luxe:hover { background: #6366f1; color: #fff; transform: scale(1.05); box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
+        .btn-luxe:active { transform: scale(0.95); }
+
+        /* TYPOGRAPHY */
+        .title-sovereign { font-family: 'Orbitron', sans-serif; letter-spacing: -2px; font-weight: 900; }
+        .status-tag { font-size: 9px; font-weight: 800; letter-spacing: 5px; color: #333; margin-top: 20px; }
+
+        /* DASHBOARD GRID (SPA) */
+        #panel-dash { max-width: 1100px; width: 95%; }
+        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+        .bento-item { background: rgba(255,255,255,0.02); border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); padding: 30px; }
+
     </style>
 </head>
 <body>
-    <div id="canvas-container"></div>
+    <canvas id="bg-canvas"></canvas>
+    <div class="ambient-glow"></div>
 
-    <div class="interface-layer">
-        <div id="main-card" class="glass-panel">
-            <h1 class="text-4xl md:text-5xl font-black mb-4">DANTE</h1>
-            <p class="text-indigo-400 text-[10px] tracking-[0.5em] font-bold uppercase mb-16">Sentinel Mode Active</p>
+    <div class="view-container">
+        
+        <!-- TELA 1: LOGIN -->
+        <div id="view-login" class="panel active glass">
+            <div class="scanner-line"></div>
+            <div class="w-20 h-20 bg-indigo-600 rounded-3xl mx-auto mb-10 flex items-center justify-center text-4xl shadow-[0_0_50px_rgba(99,102,241,0.5)] title-sovereign">C</div>
+            <h1 class="text-3xl title-sovereign mb-2">ACCESS_GRANTED</h1>
+            <p class="text-zinc-500 text-[10px] tracking-[0.4em] font-bold uppercase mb-12">Intelligence Sovereign v5.0</p>
             
-            <button class="btn-sovereign" onclick="handleInitiate()">
-                Initiate Protocol
-            </button>
-
-            <div class="status-tag">SECURE CORE 2.0</div>
+            <button onclick="gotoView('view-onboarding')" class="btn-luxe w-full">Request Entry</button>
+            <div class="status-tag uppercase">Secure connection active</div>
         </div>
+
+        <!-- TELA 2: ONBOARDING -->
+        <div id="view-onboarding" class="panel glass">
+            <h2 class="text-4xl font-extrabold tracking-tighter mb-10">Select Module</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                <div onclick="gotoView('view-dash')" class="bento-item cursor-pointer border-indigo-500/30 bg-indigo-500/5 hover:scale-105 transition-all">
+                    <div class="text-3xl mb-4">👁️</div>
+                    <h3 class="font-bold text-lg uppercase tracking-tighter">Visão de Deus</h3>
+                    <p class="text-zinc-500 text-xs mt-2 leading-relaxed">Inventory Management via Vision IA.</p>
+                </div>
+                <div class="bento-item opacity-20 grayscale">
+                    <div class="text-3xl mb-4">🩺</div>
+                    <h3 class="font-bold text-lg uppercase tracking-tighter">Clinic Pro</h3>
+                    <p class="text-zinc-500 text-xs mt-2 leading-relaxed">Schedule Optimization.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 3: DASHBOARD -->
+        <div id="view-dash" class="panel glass">
+            <div class="flex justify-between items-center mb-8 w-full px-4">
+                <h2 class="text-2xl font-black tracking-tighter uppercase">Terminal <span class="text-indigo-500">Overwatch</span></h2>
+                <button onclick="gotoView('view-login')" class="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">Logout</button>
+            </div>
+            <div class="bento-grid w-full">
+                <div class="bento-item col-span-2">
+                    <span class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Global Revenue</span>
+                    <h2 class="text-5xl font-black tracking-tighter mt-2">€ 124.500</h2>
+                </div>
+                <div class="bento-item">
+                    <span class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">System Health</span>
+                    <h2 class="text-3xl font-black text-green-400 mt-2">99.8%</h2>
+                </div>
+                <div class="bento-item col-span-3 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center">🤖</div>
+                        <span class="font-bold text-sm">Restaurante Solar dos Nunes • Active Monitoring</span>
+                    </div>
+                    <span class="text-[10px] text-zinc-600 font-bold uppercase">Há 2 min</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        let scene, camera, renderer, sentinel, particles;
+        // BACKGROUND MATRIX/RAIN OPTIMIZED
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
 
-        function init() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
+        const letters = "01";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array.from({length: columns}).fill(1);
 
-            // ROBÔ OTIMIZADO
-            const geometry = new THREE.TorusKnotGeometry(2, 0.3, 100, 16);
-            const material = new THREE.MeshStandardMaterial({ 
-                color: 0x6366f1, wireframe: true, emissive: 0x6366f1, emissiveIntensity: 0.8 
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#6366f1";
+            ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.985) drops[i] = 0;
+                drops[i]++;
             });
-            sentinel = new THREE.Mesh(geometry, material);
-            scene.add(sentinel);
-
-            const light = new THREE.PointLight(0x6366f1, 5, 30);
-            light.position.set(5, 5, 5);
-            scene.add(light);
-            scene.add(new THREE.AmbientLight(0xffffff, 0.1));
-
-            // PARTÍCULAS MAIS LEVES
-            const pCount = 1000;
-            const pGeo = new THREE.BufferGeometry();
-            const pPos = new Float32Array(pCount * 3);
-            for(let i=0; i<pCount*3; i++) pPos[i] = (Math.random() - 0.5) * 80;
-            pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-            particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0x6366f1, size: 0.05, transparent: true, opacity: 0.2 }));
-            scene.add(particles);
-
-            camera.position.z = 15;
         }
+        setInterval(draw, 40);
 
-        let time = 0;
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.005;
-            
-            sentinel.position.y = Math.sin(time) * 2;
-            sentinel.rotation.y += 0.005;
-            sentinel.rotation.z += 0.002;
-
-            particles.rotation.y += 0.0001;
-            renderer.render(scene, camera);
-        }
-
-        function handleInitiate() {
-            gsap.to("#main-card", { opacity: 0, y: -50, duration: 0.8, ease: "power4.in", onComplete: () => {
-                alert("Redirecionando para Dashboard...");
-                // Aqui entraria a troca de View
+        // VIEW NAVIGATION
+        function gotoView(viewId) {
+            const current = document.querySelector('.panel.active');
+            gsap.to(current, { opacity: 0, y: -20, scale: 0.95, duration: 0.6, ease: "power4.in", onComplete: () => {
+                current.classList.remove('active');
+                current.style.display = 'none';
+                
+                const next = document.getElementById(viewId);
+                next.style.display = 'flex';
+                gsap.fromTo(next, { opacity: 0, y: 30, scale: 1.05 }, { opacity: 1, y: 0, scale: 1, duration: 1, ease: "expo.out" });
+                next.classList.add('active');
             }});
         }
-
-        init(); animate();
-
-        window.onresize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        };
     </script>
 </body>
 </html>
