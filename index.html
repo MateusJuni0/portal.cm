@@ -2,192 +2,131 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CMTecnologia | Sovereign Portal v5.0</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMTecnologia | Sovereign Sovereign</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #6366f1; --bg: #000000; }
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; }
+        #canvas-container { position: fixed; inset: 0; z-index: 0; }
+        .ui-root { position: relative; z-index: 10; width: 100vw; height: 100vh; pointer-events: none; }
         
-        body { 
-            background: var(--bg); 
-            color: #fff; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            overflow: hidden; 
-            height: 100vh; width: 100vw;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* DIGITAL RAIN / ATMOSPHERE */
-        #bg-canvas { position: fixed; inset: 0; z-index: 0; opacity: 0.4; }
-        .ambient-glow {
-            position: fixed; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, rgba(0,0,0,0) 80%);
-            z-index: 1; pointer-events: none;
-        }
-
-        /* SOVEREIGN VIEWS */
-        .view-container { 
-            position: relative; z-index: 10; 
-            width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-        }
-        
-        .panel { 
-            position: absolute; display: none; opacity: 0; 
-            transform: scale(0.95) translateY(30px);
-            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-            width: 90%; max-width: 450px;
-        }
-        .panel.active { display: flex; flex-direction: column; opacity: 1; transform: scale(1) translateY(0); }
-
-        /* GLASSMORPHISM 3.0 */
+        /* High-End Glass */
         .glass {
-            background: rgba(10, 10, 15, 0.7);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.015);
+            backdrop-filter: blur(60px) saturate(200%);
+            -webkit-backdrop-filter: blur(60px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 40px;
-            padding: 50px 40px;
-            box-shadow: 0 50px 100px rgba(0,0,0,1);
-            text-align: center;
+            box-shadow: 0 100px 200px rgba(0,0,0,0.9);
+            pointer-events: auto;
+            opacity: 0; transform: translateY(40px) scale(0.95);
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
         }
+        .glass.active { opacity: 1; transform: translateY(0) scale(1); }
 
-        /* THE SENTINEL SCANNER (ROBO) */
-        .scanner-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, #6366f1, transparent);
-            box-shadow: 0 0 15px #6366f1;
-            animation: scanMove 3s infinite ease-in-out;
-            opacity: 0.5; z-index: 5;
-        }
-        @keyframes scanMove { 0% { top: 10%; } 50% { top: 90%; } 100% { top: 10%; } }
-
-        /* BUTTONS */
-        .btn-luxe {
+        .btn-core {
+            position: relative; overflow: hidden;
             background: #fff; color: #000;
-            padding: 20px 40px; border-radius: 20px;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 4px;
-            font-family: 'Orbitron', sans-serif; font-size: 11px;
-            transition: all 0.4s; border: none;
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            padding: 20px 60px; border-radius: 5px;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 6px;
+            font-family: 'Orbitron', sans-serif; font-size: 10px;
+            cursor: pointer; transition: 0.5s;
         }
-        .btn-luxe:hover { background: #6366f1; color: #fff; transform: scale(1.05); box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
-        .btn-luxe:active { transform: scale(0.95); }
+        .btn-core:hover { background: #6366f1; color: #fff; box-shadow: 0 0 80px rgba(99, 102, 241, 0.6); }
 
-        /* TYPOGRAPHY */
-        .title-sovereign { font-family: 'Orbitron', sans-serif; letter-spacing: -2px; font-weight: 900; }
-        .status-tag { font-size: 9px; font-weight: 800; letter-spacing: 5px; color: #333; margin-top: 20px; }
-
-        /* DASHBOARD GRID (SPA) */
-        #panel-dash { max-width: 1100px; width: 95%; }
-        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
-        .bento-item { background: rgba(255,255,255,0.02); border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); padding: 30px; }
-
+        /* Typography */
+        .title-sovereign { font-family: 'Orbitron', sans-serif; letter-spacing: 20px; font-weight: 900; margin-left: 20px; }
+        .scan-line { position: absolute; width: 100%; height: 2px; background: #6366f1; top: 0; left: 0; opacity: 0.3; box-shadow: 0 0 20px #6366f1; animation: scanning 6s infinite linear; }
+        @keyframes scanning { 0% { top: -10%; } 100% { top: 110%; } }
     </style>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
-    <div class="ambient-glow"></div>
+    <div id="canvas-container"></div>
 
-    <div class="view-container">
-        
-        <!-- TELA 1: LOGIN -->
-        <div id="view-login" class="panel active glass">
-            <div class="scanner-line"></div>
-            <div class="w-20 h-20 bg-indigo-600 rounded-3xl mx-auto mb-10 flex items-center justify-center text-4xl shadow-[0_0_50px_rgba(99,102,241,0.5)] title-sovereign">C</div>
-            <h1 class="text-3xl title-sovereign mb-2">ACCESS_GRANTED</h1>
-            <p class="text-zinc-500 text-[10px] tracking-[0.4em] font-bold uppercase mb-12">Intelligence Sovereign v5.0</p>
+    <div class="ui-root flex items-center justify-center">
+        <div id="main-panel" class="glass p-16 max-w-lg w-full text-center relative">
+            <div class="scan-line"></div>
+            <h1 class="text-4xl title-sovereign mb-4">DANTE</h1>
+            <p class="text-zinc-600 text-[9px] tracking-[1.2em] font-bold uppercase mb-20">Sovereign Intelligence</p>
             
-            <button onclick="gotoView('view-onboarding')" class="btn-luxe w-full">Request Entry</button>
-            <div class="status-tag uppercase">Secure connection active</div>
-        </div>
-
-        <!-- TELA 2: ONBOARDING -->
-        <div id="view-onboarding" class="panel glass">
-            <h2 class="text-4xl font-extrabold tracking-tighter mb-10">Select Module</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <div onclick="gotoView('view-dash')" class="bento-item cursor-pointer border-indigo-500/30 bg-indigo-500/5 hover:scale-105 transition-all">
-                    <div class="text-3xl mb-4">👁️</div>
-                    <h3 class="font-bold text-lg uppercase tracking-tighter">Visão de Deus</h3>
-                    <p class="text-zinc-500 text-xs mt-2 leading-relaxed">Inventory Management via Vision IA.</p>
-                </div>
-                <div class="bento-item opacity-20 grayscale">
-                    <div class="text-3xl mb-4">🩺</div>
-                    <h3 class="font-bold text-lg uppercase tracking-tighter">Clinic Pro</h3>
-                    <p class="text-zinc-500 text-xs mt-2 leading-relaxed">Schedule Optimization.</p>
-                </div>
+            <div class="mb-16">
+                <div class="text-[10px] text-indigo-400 font-black tracking-widest uppercase mb-4">Auth Sequence Required</div>
+                <div id="qr-placeholder" class="w-40 h-40 bg-white p-2 rounded-2xl mx-auto shadow-2xl opacity-80 hover:opacity-100 transition-opacity cursor-pointer"></div>
             </div>
-        </div>
 
-        <!-- TELA 3: DASHBOARD -->
-        <div id="view-dash" class="panel glass">
-            <div class="flex justify-between items-center mb-8 w-full px-4">
-                <h2 class="text-2xl font-black tracking-tighter uppercase">Terminal <span class="text-indigo-500">Overwatch</span></h2>
-                <button onclick="gotoView('view-login')" class="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">Logout</button>
-            </div>
-            <div class="bento-grid w-full">
-                <div class="bento-item col-span-2">
-                    <span class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Global Revenue</span>
-                    <h2 class="text-5xl font-black tracking-tighter mt-2">€ 124.500</h2>
-                </div>
-                <div class="bento-item">
-                    <span class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">System Health</span>
-                    <h2 class="text-3xl font-black text-green-400 mt-2">99.8%</h2>
-                </div>
-                <div class="bento-item col-span-3 flex justify-between items-center">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center">🤖</div>
-                        <span class="font-bold text-sm">Restaurante Solar dos Nunes • Active Monitoring</span>
-                    </div>
-                    <span class="text-[10px] text-zinc-600 font-bold uppercase">Há 2 min</span>
-                </div>
-            </div>
+            <button class="btn-core" onclick="initDive()">Connect</button>
         </div>
-
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // BACKGROUND MATRIX/RAIN OPTIMIZED
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
+        // === ENGINE v7.0 (SHADERS & CINEMATIC) ===
+        let scene, camera, renderer, starField, sentinel;
 
-        const letters = "01";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array.from({length: columns}).fill(1);
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        function draw() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#6366f1";
-            ctx.font = fontSize + "px monospace";
-            drops.forEach((y, i) => {
-                const text = letters[Math.floor(Math.random() * letters.length)];
-                ctx.fillText(text, i * fontSize, y * fontSize);
-                if (y * fontSize > canvas.height && Math.random() > 0.985) drops[i] = 0;
-                drops[i]++;
-            });
+            // 1. NEBULA DE DADOS (ACTIVE THEORY STYLE)
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            for (let i = 0; i < 8000; i++) {
+                vertices.push(THREE.MathUtils.randFloatSpread(1000), THREE.MathUtils.randFloatSpread(1000), THREE.MathUtils.randFloatSpread(1000));
+            }
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            const material = new THREE.PointsMaterial({ color: 0x6366f1, size: 0.8, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
+            starField = new THREE.Points(geometry, material);
+            scene.add(starField);
+
+            // 2. O SENTINELA (ROBÔ 3D)
+            const coreGeo = new THREE.SphereGeometry(2, 32, 32);
+            const coreMat = new THREE.MeshStandardMaterial({ color: 0x6366f1, emissive: 0x6366f1, emissiveIntensity: 2, wireframe: true });
+            sentinel = new THREE.Mesh(coreGeo, coreMat);
+            scene.add(sentinel);
+
+            const light = new THREE.PointLight(0x6366f1, 10, 100);
+            scene.add(light);
+            camera.position.z = 50;
+
+            // Entrada Cinematográfica
+            gsap.to(camera.position, { z: 15, duration: 4, ease: "expo.out" });
+            setTimeout(() => document.getElementById('main-panel').classList.add('active'), 1000);
         }
-        setInterval(draw, 40);
 
-        // VIEW NAVIGATION
-        function gotoView(viewId) {
-            const current = document.querySelector('.panel.active');
-            gsap.to(current, { opacity: 0, y: -20, scale: 0.95, duration: 0.6, ease: "power4.in", onComplete: () => {
-                current.classList.remove('active');
-                current.style.display = 'none';
-                
-                const next = document.getElementById(viewId);
-                next.style.display = 'flex';
-                gsap.fromTo(next, { opacity: 0, y: 30, scale: 1.05 }, { opacity: 1, y: 0, scale: 1, duration: 1, ease: "expo.out" });
-                next.classList.add('active');
-            }});
+        function animate() {
+            requestAnimationFrame(animate);
+            starField.rotation.y += 0.0005;
+            sentinel.rotation.y += 0.01;
+            sentinel.rotation.z += 0.005;
+            renderer.render(scene, camera);
         }
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+            gsap.to(sentinel.position, { x: x * 5, y: -y * 5, duration: 2 });
+            gsap.to(camera.rotation, { y: -x * 0.1, x: y * 0.1, duration: 2 });
+        });
+
+        new QRCode(document.getElementById("qr-placeholder"), {
+            text: "https://wa.me/351964977047",
+            width: 160, height: 160
+        });
+
+        function initDive() {
+            gsap.to(camera.position, { z: 2, duration: 2, ease: "power4.inOut" });
+            gsap.to(".glass", { opacity: 0, scale: 2, filter: "blur(50px)", duration: 1.5 });
+            setTimeout(() => alert("Sovereign Session Established."), 2000);
+        }
+
+        init(); animate();
     </script>
 </body>
 </html>
