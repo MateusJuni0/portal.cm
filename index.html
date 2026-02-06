@@ -2,83 +2,242 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <title>CMTecnologia | Portal Visão de Deus v1.0</title>
+    <title>CMTecnologia | Portal Centurião v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #030303; --card: #0d0d0f; --accent: #6366f1; --border: #1f1f23; }
-        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
-        .glass { background: rgba(255,255,255,0.02); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 24px; }
-        .view { display: none; opacity: 0; transform: scale(0.98); transition: all 0.5s ease; }
-        .view.active { display: block; opacity: 1; transform: scale(1); }
-        .btn-lorde { background: var(--accent); color: white; font-weight: 700; padding: 12px 24px; border-radius: 12px; transition: 0.3s; }
-        .btn-lorde:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+        :root { 
+            --bg: #020205; 
+            --card: rgba(20, 20, 25, 0.7); 
+            --accent: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Background Cinematic */
+        .bg-glow {
+            position: fixed;
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            top: -200px; right: -200px;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* Glassmorphism 2.0 */
+        .glass {
+            background: var(--card);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* View Management */
+        .view { 
+            display: none; 
+            opacity: 0; 
+            transform: translateY(20px) scale(0.98); 
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        .view.active { 
+            display: flex; 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+
+        /* Buttons Elite */
+        .btn-elite {
+            background: var(--accent);
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.5);
+        }
+        .btn-elite:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.8); }
+
+        /* Sidebar Spatial */
+        .sidebar {
+            width: 80px;
+            height: calc(100vh - 40px);
+            margin: 20px;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+        }
+
+        .bento-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            transition: 0.3s;
+        }
+        .bento-card:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(99, 102, 241, 0.3); }
+
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6">
+<body class="flex items-center justify-center overflow-hidden">
 
-    <!-- VIEW 1: LOGIN MATRIX -->
-    <div id="view-login" class="view active glass p-10 text-center max-w-sm">
-        <div class="w-20 h-20 bg-indigo-600 rounded-2xl mx-auto mb-8 flex items-center justify-center text-4xl shadow-2xl">🤖</div>
-        <h2 class="text-2xl font-bold mb-2">MODO LORDE</h2>
-        <p class="text-zinc-500 text-sm mb-8">Efetue login via WhatsApp para acessar o portal administrativo.</p>
-        <button onclick="showView('view-onboarding')" class="btn-lorde w-full">Acessar com QR Code</button>
+    <div class="bg-glow"></div>
+    <div class="bg-glow" style="bottom: -200px; left: -200px; background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(0,0,0,0) 70%);"></div>
+
+    <!-- [TELA 1: LOGIN LUXO] -->
+    <div id="view-login" class="view active w-full h-full flex items-center justify-center">
+        <div class="glass p-12 text-center max-w-md w-full mx-6 rounded-[40px]">
+            <div class="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-[30px] mx-auto mb-10 flex items-center justify-center text-5xl shadow-[0_20px_50px_rgba(99,102,241,0.4)]">C</div>
+            <h1 class="text-3xl font-black tracking-tighter mb-2">PORTAL LORDE</h1>
+            <p class="text-zinc-500 mb-10 font-medium tracking-wide uppercase text-xs">Acesso Restrito • CMTecnologia</p>
+            <button onclick="showView('view-onboarding')" class="btn-elite w-full">Desbloquear Agora</button>
+        </div>
     </div>
 
-    <!-- VIEW 2: ONBOARDING (NETFLIX STYLE) -->
-    <div id="view-onboarding" class="view glass p-12 w-full max-w-6xl">
-        <h2 class="text-4xl font-bold mb-10 text-center">O que vamos escalar hoje?</h2>
-        <div class="grid grid-cols-3 gap-8">
-            <div onclick="showView('view-dashboard')" class="glass p-8 cursor-pointer border-indigo-500/50 bg-indigo-500/5">
-                <div class="text-4xl mb-4">👁️</div>
-                <h3 class="text-xl font-bold mb-2">Visão de Deus</h3>
-                <p class="text-zinc-400 text-sm">Gestão de estoque autônoma via IA Vision.</p>
+    <!-- [TELA 2: ONBOARDING SPATIAL] -->
+    <div id="view-onboarding" class="view w-full h-full flex flex-col items-center justify-center p-6">
+        <h2 class="text-4xl lg:text-6xl font-black mb-4 tracking-tighter text-center">O que vamos escalar hoje?</h2>
+        <p class="text-zinc-400 mb-12 text-lg lg:text-xl font-medium text-center">Qual cérebro você quer ativar agora?</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
+            <!-- Card: Visão de Deus -->
+            <div onclick="showView('view-dashboard')" class="glass p-10 cursor-pointer group hover:bg-white/[0.05] transition-all rounded-[40px]">
+                <div class="w-16 h-16 bg-indigo-500/20 rounded-2xl flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">👁️</div>
+                <h3 class="text-2xl font-extrabold mb-4 text-white">Visão de Deus</h3>
+                <p class="text-zinc-500 leading-relaxed mb-8">Gestão autônoma de inventário via inteligência artificial ocular.</p>
+                <span class="text-indigo-400 font-bold text-sm uppercase tracking-widest">Ativar Agora →</span>
             </div>
-            <div class="glass p-8 opacity-40 grayscale">
-                <div class="text-4xl mb-4">🩺</div>
-                <h3 class="text-xl font-bold mb-2">Clínica Pro</h3>
-                <p class="text-zinc-400 text-sm">Agendamento e retorno automático de pacientes.</p>
+
+            <!-- Card: Clínica Pro -->
+            <div class="glass p-10 opacity-30 cursor-not-allowed group grayscale rounded-[40px]">
+                <div class="w-16 h-16 bg-zinc-500/20 rounded-2xl flex items-center justify-center text-4xl mb-8">🩺</div>
+                <h3 class="text-2xl font-extrabold mb-4 text-white">Clínica Pro</h3>
+                <p class="text-zinc-500 leading-relaxed mb-8">Otimização de retorno e agendamento para saúde.</p>
+                <span class="text-zinc-600 font-bold text-sm uppercase tracking-widest">Em Breve</span>
             </div>
-            <div class="glass p-8 opacity-40 grayscale">
-                <div class="text-4xl mb-4">🍷</div>
-                <h3 class="text-xl font-bold mb-2">Wine Tracker</h3>
-                <p class="text-zinc-400 text-sm">Monitoramento de adegas e safras raras.</p>
+
+            <!-- Card: Social Mining -->
+            <div class="glass p-10 opacity-30 cursor-not-allowed group grayscale rounded-[40px]">
+                <div class="w-16 h-16 bg-zinc-500/20 rounded-2xl flex items-center justify-center text-4xl mb-8">🔍</div>
+                <h3 class="text-2xl font-extrabold mb-4 text-white">Social Miner</h3>
+                <p class="text-zinc-500 leading-relaxed mb-8">Busca ativa de leads de alto valor em redes sociais.</p>
+                <span class="text-zinc-600 font-bold text-sm uppercase tracking-widest">Em Breve</span>
             </div>
         </div>
     </div>
 
-    <!-- VIEW 3: DASHBOARD FINAL -->
-    <div id="view-dashboard" class="view w-full max-w-7xl h-[85vh] flex flex-col">
-         <!-- Aqui entra o Dashboard V4.1 completo com o Widget do Alfred integrado -->
-         <h1 class="text-3xl font-bold mb-6">Portal Administrativo (Live)</h1>
-         <div class="grid grid-cols-4 gap-6 flex-1">
-             <div class="col-span-3 glass p-8 overflow-y-auto">
-                 <h2 class="text-xl font-bold mb-4">Relatório de Operações</h2>
-                 <div class="bg-zinc-900 rounded-xl p-4 text-green-400 font-mono text-xs">
-                     [LÚCIO]: Monitorando 72.62.179.56...<br>
-                     [ALFRED]: 5 faturas processadas no Cofre hoje.<br>
-                     [DANTE]: 50 leads minerados em Lisboa.
-                 </div>
-             </div>
-             <div class="glass p-6 flex flex-col bg-zinc-900/50">
-                 <div class="font-bold text-indigo-400 mb-4 flex items-center gap-2">🤖 Alfred Gestor</div>
-                 <div class="flex-1 text-xs text-zinc-400 italic">"Chefe, notei que o azeite está no fim e encontrei 3 fornecedores com preço 15% menor. Quer que eu faça o pedido?"</div>
-                 <button class="btn-lorde mt-4 text-xs">Autorizar Alfred</button>
-             </div>
-         </div>
+    <!-- [TELA 3: DASHBOARD BENTO] -->
+    <div id="view-dashboard" class="view w-full h-full flex p-6 gap-6">
+        <!-- Sidebar -->
+        <div class="sidebar glass">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl mb-12 flex items-center justify-center font-black">C</div>
+            <div class="space-y-6 flex-1">
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-indigo-400 border border-white/5">🏠</div>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center text-zinc-600 hover:bg-white/5">📊</div>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center text-zinc-600 hover:bg-white/5">⚙️</div>
+            </div>
+            <div onclick="showView('view-login')" class="w-12 h-12 rounded-xl flex items-center justify-center text-red-500/50 hover:bg-red-500/10 cursor-pointer">🚪</div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="flex-1 flex flex-col gap-6">
+            <!-- Top Bar -->
+            <header class="flex justify-between items-center py-2">
+                <h1 class="text-3xl font-black tracking-tighter">Dashboard <span class="text-indigo-500">Master</span></h1>
+                <div class="flex gap-4">
+                    <button class="glass px-6 py-3 rounded-2xl text-sm font-bold hover:bg-white/5 transition">Minha Conta</button>
+                    <button class="btn-elite text-sm py-3 px-8">📸 Scan com IA</button>
+                </div>
+            </header>
+
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-4 grid-rows-2 gap-6 flex-1">
+                <div class="col-span-2 row-span-1 bento-card glass flex flex-col justify-between border-none">
+                    <span class="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">Receita Total Bruta</span>
+                    <h2 class="text-6xl font-black tracking-tighter">€ 124.500</h2>
+                    <p class="text-green-400 text-sm font-bold flex items-center gap-2">↑ 24% <span class="text-zinc-600 font-medium">em relação ao último mês</span></p>
+                </div>
+                <div class="col-span-1 bento-card glass border-none">
+                    <span class="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">Automações Ativas</span>
+                    <h2 class="text-5xl font-black mt-4">42</h2>
+                </div>
+                <div class="col-span-1 bento-card glass border-none">
+                    <span class="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">VPS Health</span>
+                    <h2 class="text-5xl font-black mt-4 text-indigo-400 tracking-tighter">99.8%</h2>
+                </div>
+                
+                <!-- Tabela de Elite -->
+                <div class="col-span-3 bento-card glass border-none overflow-y-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="font-black text-xl">Atividade em Tempo Real</h3>
+                        <span class="text-xs text-zinc-500 uppercase tracking-widest font-bold">Monitorado pelo Lúcio</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-5 bg-white/[0.02] rounded-[24px] border border-white/5 hover:border-indigo-500/30 transition-all">
+                            <div class="flex items-center gap-4">
+                                <div class="avatar w-10 h-10 rounded-full bg-zinc-800"></div>
+                                <div>
+                                    <span class="font-bold text-sm block text-white">Restaurante Solar dos Nunes</span>
+                                    <span class="text-[10px] text-zinc-500 uppercase font-bold tracking-wider">Lisboa • Inventário</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-black text-indigo-400 block text-sm">€ 240,00</span>
+                                <span class="text-[10px] text-zinc-600 font-bold">HÁ 2 MIN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alfred Chat Embedded -->
+                <div class="col-span-1 bento-card glass border-none bg-indigo-600/5 border-indigo-500/20 flex flex-col">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-lg">🤖</div>
+                        <div class="font-black text-xs uppercase tracking-widest text-indigo-400">Alfred AI</div>
+                    </div>
+                    <div class="flex-1 text-xs text-zinc-300 leading-relaxed font-medium">
+                        "Mateus, identifiquei 3 novos leads de alto ticket em Portugal agora. Quer que eu prepare os relatórios de automação para enviarmos pelo WhatsApp?"
+                    </div>
+                    <button class="bg-indigo-600 hover:bg-indigo-500 w-full py-4 rounded-2xl mt-6 text-[10px] font-black uppercase tracking-widest text-white transition-all">Autorizar Relatório</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         function showView(v) {
-            document.querySelectorAll('.view').forEach(x => {
-                x.classList.remove('active');
-                setTimeout(() => x.style.display = 'none', 100);
-            });
+            const views = document.querySelectorAll('.view');
             const target = document.getElementById(v);
-            setTimeout(() => {
-                target.style.display = 'block';
-                setTimeout(() => target.classList.add('active'), 50);
-            }, 150);
+            
+            views.forEach(x => {
+                if(x.classList.contains('active')) {
+                    x.style.opacity = '0';
+                    x.style.transform = 'translateY(-20px) scale(0.95)';
+                    setTimeout(() => {
+                        x.classList.remove('active');
+                        x.style.display = 'none';
+                        
+                        target.style.display = 'flex';
+                        setTimeout(() => {
+                            target.classList.add('active');
+                            target.style.opacity = '1';
+                            target.style.transform = 'translateY(0) scale(1)';
+                        }, 50);
+                    }, 600);
+                }
+            });
         }
     </script>
 </body>
