@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal CMTecnologia - Dante Guardião</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #020205;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+
+        /* Fundo com profundidade */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a2a44 0%, #020205 80%);
+            z-index: -1;
+        }
+
+        /* O Dante (SVG Animado) */
+        #dante-container {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            z-index: 10;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 15px rgba(0, 255, 200, 0.4));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Círculo Giratório de Energia */
+        .energy-core {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border: 1px dashed rgba(0, 255, 200, 0.2);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Card de Login Glassmorphism */
+        .glass-card {
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* O "Caçador de Néon" - Feixe que corre a tela */
+        .neon-trail {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ffc8;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00ffc8, 0 0 40px #00ffc8;
+            offset-path: rect(0% 100% 100% 0% round 20px);
+            animation: follow-path 8s linear infinite;
+        }
+
+        @keyframes follow-path {
+            0% { offset-distance: 0%; }
+            100% { offset-distance: 100%; }
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            padding: 16px !important;
+            border-radius: 12px !important;
+            width: 100%;
+        }
+
+        .btn-access {
+            background: linear-gradient(135deg, #00ffc8 0%, #008f7a 100%);
+            color: #020205;
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding: 16px;
+            border-radius: 12px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-access:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.6);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="energy-core"></div>
+    
+    <!-- O Dante em SVG (Busto High-Tech) -->
+    <div id="dante-container">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 10L80 30V70L50 90L20 70V30L50 10Z" stroke="#00ffc8" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="35" cy="45" r="3" fill="#00ffc8">
+                <animate attributeName="opacity" values="1;0.2;1" dur="2s" infinite />
+            </circle>
+            <circle cx="65" cy="45" r="3" fill="#00ffc8">
+                <animate attributeName="opacity" values="1;0.2;1" dur="2s" infinite />
+            </circle>
+            <path d="M40 65H60" stroke="#00ffc8" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <div class="glass-card text-center">
+        <div class="neon-trail"></div>
+        <h1 class="text-3xl font-black mb-1 tracking-tighter">CM<span class="text-teal-400">TEC</span></h1>
+        <p class="text-gray-500 text-[10px] uppercase tracking-[0.3em] mb-10">Intelligence Terminal</p>
+
+        <div class="text-left space-y-4">
+            <div>
+                <label class="text-gray-500 text-[10px] uppercase font-bold mb-2 block ml-1">Secure Identity (Email)</label>
+                <input type="email" id="email" placeholder="identidade@empresa.com" onfocus="moveDanteToLogin()">
+            </div>
+            <button class="btn-access uppercase text-xs">Iniciar Protocolo Magic Link</button>
+        </div>
+
+        <div class="mt-10 opacity-30 text-[8px] uppercase tracking-widest">
+            Encryption: Active | Dante OS v5.0
+        </div>
+    </div>
+
+    <script>
+        function moveDanteToLogin() {
+            const dante = document.getElementById('dante-container');
+            dante.style.top = '15%';
+            dante.style.transform = 'scale(0.8)';
+            // O Dante "olha" para o campo
+        }
+    </script>
+</body>
+</html>

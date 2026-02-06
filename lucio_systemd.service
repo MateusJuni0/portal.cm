@@ -1,0 +1,19 @@
+[Unit]
+Description=Lucio Sub-CEO Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root
+ExecStartPre=/usr/bin/pkill -9 openclaw || true
+ExecStartPre=/usr/bin/pkill -9 clawdbot-gateway || true
+ExecStartPre=/bin/sleep 2
+ExecStart=/root/start_lucio.sh
+Restart=always
+RestartSec=5
+KillMode=mixed
+KillSignal=SIGKILL
+
+[Install]
+WantedBy=multi-user.target

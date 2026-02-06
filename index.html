@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visão de Deus | CMTecnologia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* MATRIX / RAIN EFFECT CANVAS */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-strong {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-gradient-blue {
+            background: linear-gradient(to right, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        .pulse-dot::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: inherit;
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        .iphone-border {
+            box-shadow: 0 0 0 2px #333, 0 0 0 4px #1a1a1a, 0 20px 50px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <!-- Efeito de Chuva Digital / Luzes -->
+    <canvas id="canvas-container"></canvas>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 top-0 glass-strong">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(37,99,235,0.5)]">V</div>
+                <span class="font-bold tracking-tight text-lg">Visão de Deus.</span>
+            </div>
+            <a href="#" class="glass px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-white hover:text-black transition-all">Acesso Beta</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-32 pb-20">
+        <!-- Glow Central -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
+            <!-- Texto -->
+            <div class="space-y-8 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-semibold text-blue-400 uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    Sistema Online
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-bold tracking-tight leading-tight">
+                    Sua casa no <br>
+                    <span class="text-gradient-blue">piloto automático.</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-xl mx-auto lg:mx-0">
+                    A IA que <b>vê o que falta</b>, <b>busca o preço</b> e <b>compra</b>.
+                    <br>Sem listas. Sem esforço.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                    <button class="bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                        Quero Testar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mockup iPhone com Animação -->
+            <div class="relative lg:h-[700px] flex items-center justify-center animate-float">
+                <div class="iphone-border bg-black rounded-[50px] p-3 w-[350px] h-[700px] relative z-20">
+                    <div class="bg-gray-900 w-full h-full rounded-[40px] overflow-hidden relative border border-gray-800">
+                        <!-- Imagem da Despensa -->
+                        <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?q=80&w=2080&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Pantry">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+
+                        <!-- AR Tags (Simulação de Visão Computacional) -->
+                        <div class="absolute top-1/4 left-10 glass px-3 py-1.5 rounded-xl flex items-center gap-2 border-l-4 border-green-500 animate-bounce" style="animation-duration: 3s">
+                            <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                            <div>
+                                <div class="text-[10px] font-bold text-white">Arroz Tio João</div>
+                                <div class="text-[8px] text-gray-300">5kg • Cheio</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-1/3 right-8 glass px-3 py-1.5 rounded-xl flex items-center gap-2 border-l-4 border-red-500">
+                            <div class="w-2 h-2 bg-red-500 rounded-full pulse-dot"></div>
+                            <div>
+                                <div class="text-[10px] font-bold text-white">Azeite Gallo</div>
+                                <div class="text-[8px] text-gray-300">Acabando • <span class="text-green-400 font-bold">€4.99</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Assistant -->
+                        <div class="absolute bottom-0 w-full glass rounded-t-[30px] p-6 pb-10">
+                            <div class="flex gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-xl">🤖</div>
+                                <div class="bg-white/10 rounded-2xl p-3 text-xs text-gray-200">
+                                    <span class="text-blue-400 font-bold block mb-1">Dante (Gestor)</span>
+                                    Chefe, encontrei o azeite em oferta. Posso pedir?
+                                </div>
+                            </div>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:bg-blue-500 transition-colors">
+                                Sim, comprar agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Efeito de "Chuva Digital" / Partículas
+        const canvas = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.speed = Math.random() * 0.5 + 0.1;
+                this.size = Math.random() * 2;
+                this.opacity = Math.random() * 0.5;
+            }
+            update() {
+                this.y += this.speed;
+                if (this.y > height) this.y = 0;
+                this.opacity = Math.sin(Date.now() * 0.001 * this.speed) * 0.5 + 0.2;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(100, 150, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 100; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

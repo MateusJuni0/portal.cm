@@ -1,0 +1,16 @@
+[Unit]
+Description=Lucio Ciclo 24/7
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/cerebro/ferramentas
+ExecStart=/usr/bin/node /root/cerebro/ferramentas/ciclo_lucio_completo.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/lucio_ciclo.log
+StandardError=append:/var/log/lucio_ciclo_erro.log
+
+[Install]
+WantedBy=multi-user.target

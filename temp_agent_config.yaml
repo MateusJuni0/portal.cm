@@ -1,0 +1,11 @@
+model: groq/llama-3.3-70b-versatile
+thinking: low
+workdir: /root/.openclaw/workspace
+
+context:
+  - path: SOUL.md
+  - path: IDENTITY.md
+  - path: AGENTS.md
+  - path: USER.md
+  - path: TOOLS.md
+  - path: memory/2026-02-04.md

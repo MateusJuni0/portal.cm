@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal CMTecnologia - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #050505;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animação Neon de Fundo */
+        .neon-bg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 255, 200, 0.15) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(50px);
+            animation: move 10s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-100px, -100px); }
+            to { transform: translate(100px, 100px); }
+        }
+
+        /* Efeito Vidro Espelhado */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Borda Neon que corre */
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffc8, transparent);
+            animation: border-run 3s linear infinite;
+        }
+
+        @keyframes border-run {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #00ffc8 !important;
+            box-shadow: 0 0 10px rgba(0, 255, 200, 0.3);
+            outline: none;
+        }
+
+        .btn-magic {
+            background: linear-gradient(90deg, #00ffc8, #008f7a);
+            color: #050505;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-magic:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 255, 200, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-bg"></div>
+    
+    <div class="glass-card p-10 w-full max-w-md text-center">
+        <h1 class="text-white text-2xl font-light mb-2 tracking-widest">CM<span class="font-bold text-teal-400">TECNOLOGIA</span></h1>
+        <p class="text-gray-400 text-sm mb-8">ACESSO AO ECOSSISTEMA</p>
+
+        <div class="space-y-6 text-left">
+            <div>
+                <label class="text-gray-500 text-xs uppercase mb-2 block">E-mail de Cliente</label>
+                <input type="email" placeholder="nome@empresa.com" class="w-full p-4 rounded-lg">
+            </div>
+
+            <button class="btn-magic w-full p-4 rounded-lg">
+                Enviar Código via WhatsApp
+            </button>
+        </div>
+
+        <div class="mt-8 text-gray-600 text-[10px] uppercase tracking-tighter">
+            Powered by CMTec Engine 2026 | Secure Terminal
+        </div>
+    </div>
+</body>
+</html>

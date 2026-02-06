@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CMTec - Gestão 360</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background: #020205; color: white; font-family: 'Inter', sans-serif; margin: 0; display: flex; }
+        .sidebar { width: 80px; height: 100vh; background: rgba(255,255,255,0.02); border-right: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .glass-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; backdrop-filter: blur(15px); padding: 25px; transition: 0.3s; }
+        .glass-card:hover { border-color: #00ffc8; box-shadow: 0 0 20px rgba(0, 255, 200, 0.1); }
+        .stat-value { font-size: 2rem; font-weight: 900; letter-spacing: -1px; color: #00ffc8; }
+        .stat-label { font-size: 10px; text-transform: uppercase; color: #64748b; letter-spacing: 2px; }
+        .neon-glow { text-shadow: 0 0 10px rgba(0, 255, 200, 0.5); }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="mb-10 text-teal-400 font-black text-xl">CM</div>
+        <div class="space-y-8 opacity-40">
+            <div class="cursor-pointer hover:opacity-100">📊</div>
+            <div class="cursor-pointer hover:opacity-100">🥘</div>
+            <div class="cursor-pointer hover:opacity-100">📦</div>
+            <div class="cursor-pointer hover:opacity-100">👥</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-2xl font-light">Bem-vindo, <span class="font-bold">Comandante Mateus</span></h1>
+                <p class="text-xs text-gray-500 uppercase tracking-widest">Dante OS v5.0 | Sistema Operativo</p>
+            </div>
+            <div class="flex items-center space-y-2 text-right">
+                <div class="text-[10px] text-emerald-400 border border-emerald-400/30 px-3 py-1 rounded-full bg-emerald-400/10">SISTEMA ONLINE</div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-card">
+                <div class="stat-label">Lucro do Dia</div>
+                <div class="stat-value">€ 1.450,00</div>
+                <div class="text-[10px] text-green-500 mt-2">+12% vs ontem</div>
+            </div>
+            <div class="glass-card">
+                <div class="stat-label">Pedidos Ativos</div>
+                <div class="stat-value">14</div>
+                <div class="text-[10px] text-teal-400 mt-2">Média: 18 min</div>
+            </div>
+            <div class="glass-card">
+                <div class="stat-label">Stock Crítico</div>
+                <div class="stat-value text-red-500">03</div>
+                <div class="text-[10px] text-red-400 mt-2">Reposição urgente</div>
+            </div>
+            <div class="glass-card">
+                <div class="stat-label">NPS Score</div>
+                <div class="stat-value">9.8</div>
+                <div class="text-[10px] text-teal-400 mt-2">IA Sentiment: Positivo</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-card h-80">
+                <h3 class="stat-label mb-6">Volume de Vendas (7 dias)</h3>
+                <canvas id="salesChart"></canvas>
+            </div>
+            <div class="glass-card h-80 overflow-hidden">
+                <h3 class="stat-label mb-6">Últimos Pedidos</h3>
+                <div class="space-y-4 text-xs">
+                    <div class="flex justify-between border-b border-white/5 pb-2">
+                        <span class="text-gray-400">#9832 - Hamburguer Classic</span>
+                        <span class="text-emerald-400 font-bold">PREPARANDO</span>
+                    </div>
+                    <div class="flex justify-between border-b border-white/5 pb-2">
+                        <span class="text-gray-400">#9831 - Pizza Margherita</span>
+                        <span class="text-teal-500 font-bold">PRONTO</span>
+                    </div>
+                    <div class="flex justify-between border-b border-white/5 pb-2">
+                        <span class="text-gray-400">#9830 - Cerveja Artesanal</span>
+                        <span class="text-gray-500 font-bold">ENTREGUE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+                datasets: [{
+                    label: 'Vendas (€)',
+                    data: [1200, 1900, 1500, 2500, 3200, 4800, 4200],
+                    borderColor: '#00ffc8',
+                    backgroundColor: 'rgba(0, 255, 200, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

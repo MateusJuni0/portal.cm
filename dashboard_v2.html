@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Inteligente - CMTec</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #020205; color: white; font-family: 'Inter', sans-serif; display: flex; }
+        .glass-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+        .hidden-module { display: none !important; }
+        .neon-text { color: #00ffc8; text-shadow: 0 0 10px rgba(0, 255, 200, 0.3); }
+    </style>
+</head>
+<body onload="applyPermissions()">
+    <div class="sidebar w-20 h-screen border-r border-white/5 flex flex-col items-center py-10 space-y-10">
+        <div class="text-teal-400 font-bold">CM</div>
+        <div id="nav-finance" class="cursor-pointer">💰</div>
+        <div id="nav-ops" class="cursor-pointer">🥘</div>
+        <div id="nav-stock" class="cursor-pointer">📦</div>
+    </div>
+
+    <div class="main p-10 flex-1">
+        <header class="mb-10">
+            <h1 id="welcome-msg" class="text-3xl font-light">Autenticando...</h1>
+            <p id="user-role-label" class="text-[10px] text-teal-500 uppercase tracking-widest"></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- MÓDULO FINANCEIRO (Apenas OWNER) -->
+            <div id="mod-finance" class="glass-card">
+                <p class="text-xs text-gray-500">LUCRO ESTIMADO</p>
+                <h2 class="text-2xl font-black neon-text">€ 4.250,00</h2>
+            </div>
+
+            <!-- MÓDULO OPERAÇÃO (OWNER, MANAGER, KITCHEN) -->
+            <div id="mod-ops" class="glass-card">
+                <p class="text-xs text-gray-500">PEDIDOS EM FILA</p>
+                <h2 class="text-2xl font-black text-white">12 ATIVOS</h2>
+            </div>
+
+            <!-- MÓDULO STOCK (OWNer, MANAGER) -->
+            <div id="mod-stock" class="glass-card">
+                <p class="text-xs text-gray-500">ALERTAS DE STOCK</p>
+                <h2 class="text-2xl font-black text-red-500">03 CRÍTICOS</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function applyPermissions() {
+            // Simulando leitura de token vindo do n8n
+            const params = new URLSearchParams(window.location.search);
+            const role = params.get('role') || 'OWNER'; // Padrão para teste
+            const name = params.get('name') || 'Mateus Oliveira';
+
+            document.getElementById('welcome-msg').innerText = `Bem-vindo, ${name}`;
+            document.getElementById('user-role-label').innerText = `Nível de Acesso: ${role}`;
+
+            if (role === 'KITCHEN') {
+                document.getElementById('mod-finance').classList.add('hidden-module');
+                document.getElementById('mod-stock').classList.add('hidden-module');
+                document.getElementById('nav-finance').style.display = 'none';
+                document.getElementById('nav-stock').style.display = 'none';
+            } else if (role === 'MANAGER') {
+                document.getElementById('mod-finance').classList.add('hidden-module');
+                document.getElementById('nav-finance').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

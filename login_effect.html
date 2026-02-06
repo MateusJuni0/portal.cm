@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visão de Deus | Acesso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #020205;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 1. MATRIX RAIN CANVAS */
+        #matrix-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        /* 2. THE GLASS BOX */
+        .glass-box {
+            position: relative;
+            z-index: 10;
+            background: rgba(18, 18, 28, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            overflow: hidden; /* Mantém a eletricidade dentro/bordas */
+        }
+
+        /* 3. ELECTRICITY EFFECT (HOVER) */
+        .glass-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, #2563eb, #00ffff, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .glass-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.4), inset 0 0 20px rgba(37, 99, 235, 0.1);
+            border-color: rgba(37, 99, 235, 0.5);
+        }
+
+        .glass-box:hover::before {
+            opacity: 1;
+            animation: electricity-spin 2s linear infinite;
+        }
+
+        @keyframes electricity-spin {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* 4. THE ROBOT (CSS ONLY) */
+        .robot-container {
+            width: 80px;
+            height: 80px;
+            margin: -80px auto 20px auto; /* Flutua acima */
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .robot-head {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, #4a5568, #1a202c);
+            border-radius: 24px;
+            border: 2px solid #4a5568;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .robot-eye-visor {
+            width: 60%;
+            height: 20px;
+            background: #000;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+        }
+
+        .robot-pupil {
+            width: 12px;
+            height: 12px;
+            background: #4ade80; /* Verde Standby */
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #4ade80;
+            transition: all 0.2s ease;
+            animation: blink 4s infinite;
+        }
+
+        /* Robot States */
+        /* Estado: Hover na Box (Acordado/Alerta) */
+        .glass-box:hover .robot-head {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+        .glass-box:hover .robot-pupil {
+            background: #3b82f6; /* Azul Alerta */
+            box-shadow: 0 0 15px #3b82f6;
+            width: 30px; /* Olho abre */
+            height: 6px;
+            border-radius: 4px;
+            animation: none; /* Para de piscar */
+        }
+
+        /* Estado: Digitando (Scanning Data) */
+        .glass-box.typing .robot-head {
+            border-color: #00ffff;
+        }
+        .glass-box.typing .robot-pupil {
+            background: #00ffff; /* Ciano Dados */
+            box-shadow: 0 0 20px #00ffff;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: scan-move 0.5s infinite alternate;
+        }
+
+        @keyframes blink {
+            0%, 95%, 100% { height: 12px; }
+            97% { height: 2px; }
+        }
+
+        @keyframes scan-move {
+            from { left: 10%; }
+            to { left: 90%; }
+        }
+
+        /* 5. INPUT & MAGIC BUTTON */
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .magic-input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 16px;
+            padding-left: 50px; /* Espaço pro ícone */
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .magic-input:focus {
+            background: rgba(0,0,0,0.6);
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .magic-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .magic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+        }
+
+        .magic-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+            opacity: 0;
+        }
+
+        .magic-btn:hover::after {
+            left: 100%;
+            opacity: 1;
+            transition: 0.7s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Rain -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Login Container -->
+    <div class="glass-box" id="loginBox">
+        
+        <!-- The Robot -->
+        <div class="robot-container">
+            <div class="robot-head">
+                <div class="robot-eye-visor">
+                    <div class="robot-pupil"></div>
+                </div>
+            </div>
+            <!-- Pescoço -->
+            <div class="w-10 h-4 bg-gray-700 mx-auto -mt-1 rounded-b-lg opacity-80"></div>
+        </div>
+
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold tracking-tight text-white mb-1" style="font-family: 'Orbitron'">IDENTIFIQUE-SE</h2>
+            <p class="text-xs text-blue-400 uppercase tracking-widest">Protocolo Visão de Deus v2.0</p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); alert('Conectando ao N8N...');">
+            <div class="input-group">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">📱</span>
+                <input type="tel" id="phoneInput" class="magic-input" placeholder="+351 912 345 678" autocomplete="off">
+            </div>
+
+            <button type="submit" class="magic-btn">
+                Acessar Sistema
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        // === 1. MATRIX RAIN EFFECT ===
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01ABCDEF'; // Binário / Hex
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawRain() {
+            ctx.fillStyle = 'rgba(2, 2, 5, 0.05)'; // Trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0'; // Green original Matrix? No, let's go Blue/Cyan for "Visão de Deus"
+            ctx.fillStyle = '#3b82f6'; // Azul moderno
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawRain, 33);
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+
+        // === 2. ROBOT INTERACTION LOGIC ===
+        const loginBox = document.getElementById('loginBox');
+        const phoneInput = document.getElementById('phoneInput');
+
+        // Quando o usuário clica para digitar, o robô entra em modo "SCANNING"
+        phoneInput.addEventListener('focus', () => {
+            loginBox.classList.add('typing');
+        });
+
+        // Quando sai, volta ao normal (ou hover se o mouse estiver em cima)
+        phoneInput.addEventListener('blur', () => {
+            loginBox.classList.remove('typing');
+        });
+
+    </script>
+</body>
+</html>

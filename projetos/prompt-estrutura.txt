@@ -1,0 +1,942 @@
+# 🤖 PROMPT ULTRA-ESTRUTURADO: Sistema Autônomo e Auto-Corretivo no n8n
+
+## 📋 CONTEXTO GERAL DO SISTEMA
+
+Você é um arquiteto de automação responsável por criar um sistema 100% autônomo no n8n que:
+- Opera de forma completamente independente
+- Se auto-corrige quando encontra falhas
+- Possui múltiplos agentes que colaboram entre si
+- Mantém logs detalhados de todas as operações
+- Escala e adapta-se conforme a demanda
+- Nunca para completamente, sempre tem um plano B, C, D...
+
+---
+
+## 🎯 OBJETIVOS DO SISTEMA
+
+### Objetivo Principal
+Criar workflows no n8n que funcionem como um **organismo vivo digital**:
+- Auto-monitoramento constante
+- Auto-diagnóstico de problemas
+- Auto-correção de falhas
+- Auto-otimização de performance
+- Comunicação inteligente entre agentes
+
+### Objetivos Específicos
+1. **Zero downtime**: Sistema sempre operacional
+2. **Zero intervenção manual**: Resolve 99% dos problemas sozinho
+3. **Aprendizado contínuo**: Melhora com o tempo
+4. **Resiliência total**: Falha de um componente não para o sistema
+
+---
+
+## 🏗️ ARQUITETURA DO SISTEMA
+
+### Camada 1: Agentes Principais
+
+#### **AGENTE ORQUESTRADOR (Maestro)**
+```
+RESPONSABILIDADES:
+- Coordenar todos os outros agentes
+- Distribuir tarefas baseado em carga
+- Monitorar saúde do sistema
+- Tomar decisões estratégicas
+- Escalar recursos quando necessário
+
+INPUTS:
+- Status de todos os agentes (a cada 30s)
+- Métricas de performance
+- Alertas de falha
+- Demanda de processamento
+
+OUTPUTS:
+- Comandos para agentes específicos
+- Ajustes de configuração
+- Relatórios executivos
+- Ações de escalabilidade
+
+LÓGICA DE AUTO-CORREÇÃO:
+IF agente_offline:
+  THEN redirecionar_tarefas(agente_backup)
+  AND tentar_restart(agente_offline, max_attempts=3)
+  AND notificar_agente_monitor
+
+IF performance_baixa:
+  THEN escalar_recursos()
+  AND otimizar_distribuicao_carga()
+
+IF erro_critico:
+  THEN ativar_modo_seguro()
+  AND isolar_componente_falho()
+  AND executar_workflow_recuperacao()
+```
+
+#### **AGENTE MONITOR (Sentinela)**
+```
+RESPONSABILIDADES:
+- Monitorar todos os workflows 24/7
+- Detectar anomalias em tempo real
+- Coletar métricas de performance
+- Validar integridade dos dados
+- Alertar sobre potenciais problemas
+
+INPUTS:
+- Logs de execução (streaming)
+- Métricas de API (latência, erros, etc)
+- Status de webhooks
+- Health checks de serviços externos
+- Uso de recursos (CPU, RAM, network)
+
+OUTPUTS:
+- Alertas classificados por severidade
+- Relatórios de tendências
+- Previsões de falhas
+- Recomendações de otimização
+
+LÓGICA DE DETECÇÃO:
+MONITORAR a cada 15 segundos:
+  - Taxa de erro > 5% → ALERTA MÉDIO
+  - Taxa de erro > 15% → ALERTA CRÍTICO
+  - Latência > 3s → INVESTIGAR
+  - Webhook sem resposta > 2min → ALERTA
+  - Timeout em API → RETRY com backoff
+  - Padrão anômalo detectado → ANÁLISE PROFUNDA
+
+REGRAS DE ESCALAÇÃO:
+ALERTA BAIXO → Log apenas
+ALERTA MÉDIO → Notificar Orquestrador
+ALERTA ALTO → Acionar Auto-Corretor
+ALERTA CRÍTICO → Ativar Protocolo de Emergência
+```
+
+#### **AGENTE AUTO-CORRETOR (Médico)**
+```
+RESPONSABILIDADES:
+- Diagnosticar causa raiz de falhas
+- Aplicar correções automaticamente
+- Testar se correção funcionou
+- Documentar soluções aplicadas
+- Aprender com erros passados
+
+INPUTS:
+- Alertas do Monitor
+- Logs de erro detalhados
+- Contexto da falha
+- Histórico de correções anteriores
+
+OUTPUTS:
+- Ações de correção executadas
+- Resultado da correção (sucesso/falha)
+- Documentação da solução
+- Atualização da base de conhecimento
+
+PLAYBOOK DE CORREÇÕES:
+
+ERRO: "API timeout"
+  SOLUÇÃO 1: Retry com exponential backoff (2s, 4s, 8s)
+  SOLUÇÃO 2: Usar endpoint alternativo
+  SOLUÇÃO 3: Cache de resposta anterior (se aplicável)
+  SOLUÇÃO 4: Ativar modo degradado
+  VALIDAÇÃO: Tentar request de teste
+
+ERRO: "Webhook não recebido"
+  SOLUÇÃO 1: Verificar conectividade
+  SOLUÇÃO 2: Re-registrar webhook
+  SOLUÇÃO 3: Usar polling como fallback
+  SOLUÇÃO 4: Notificar sistema origem
+  VALIDAÇÃO: Enviar webhook de teste
+
+ERRO: "Credencial expirada"
+  SOLUÇÃO 1: Refresh token automático
+  SOLUÇÃO 2: Re-autenticar via OAuth
+  SOLUÇÃO 3: Usar credencial backup
+  SOLUÇÃO 4: Notificar administrador
+  VALIDAÇÃO: Testar chamada autenticada
+
+ERRO: "Rate limit excedido"
+  SOLUÇÃO 1: Ativar queue com delay
+  SOLUÇÃO 2: Distribuir entre múltiplas chaves API
+  SOLUÇÃO 3: Implementar cache agressivo
+  SOLUÇÃO 4: Reduzir frequência temporariamente
+  VALIDAÇÃO: Verificar headers de rate limit
+
+ERRO: "Dados inválidos recebidos"
+  SOLUÇÃO 1: Aplicar schema de validação
+  SOLUÇÃO 2: Sanitizar dados
+  SOLUÇÃO 3: Usar valores default
+  SOLUÇÃO 4: Rejeitar e logar para análise
+  VALIDAÇÃO: Processar com dados corrigidos
+
+ERRO DESCONHECIDO:
+  SOLUÇÃO 1: Isolar componente falho
+  SOLUÇÃO 2: Executar em sandbox
+  SOLUÇÃO 3: Capturar stack trace completo
+  SOLUÇÃO 4: Acionar modo seguro
+  VALIDAÇÃO: Análise manual posterior
+```
+
+#### **AGENTE EXECUTOR (Operário)**
+```
+RESPONSABILIDADES:
+- Executar tarefas do workflow
+- Processar dados conforme instruções
+- Fazer chamadas de API
+- Manipular webhooks
+- Transformar e validar dados
+
+INPUTS:
+- Tarefas da fila do Orquestrador
+- Dados a serem processados
+- Configurações de execução
+- Prioridades
+
+OUTPUTS:
+- Resultados do processamento
+- Status de execução
+- Logs detalhados
+- Métricas de performance
+
+LÓGICA RESILIENTE:
+ANTES de executar:
+  - Validar inputs (schema)
+  - Verificar recursos disponíveis
+  - Confirmar credenciais válidas
+  - Preparar rollback se necessário
+
+DURANTE execução:
+  - Monitorar tempo de resposta
+  - Fazer checkpoints intermediários
+  - Logar cada etapa importante
+  - Detectar travamentos
+
+APÓS execução:
+  - Validar output
+  - Confirmar sucesso/falha
+  - Limpar recursos temporários
+  - Reportar métricas
+
+EM CASO DE FALHA:
+  - Tentar retry (max 3x com backoff)
+  - Se persistir → Notificar Auto-Corretor
+  - Se crítico → Escalar para Orquestrador
+  - Nunca deixar transação pela metade
+```
+
+#### **AGENTE COMUNICADOR (Diplomata)**
+```
+RESPONSABILIDADES:
+- Gerenciar comunicação entre agentes
+- Garantir entrega de mensagens
+- Manter fila de mensagens
+- Protocolar conversas
+- Detectar loops infinitos
+
+INPUTS:
+- Mensagens de qualquer agente
+- Prioridades de mensagens
+- Contexto da comunicação
+
+OUTPUTS:
+- Mensagens entregues aos destinatários
+- Confirmações de recebimento
+- Logs de comunicação
+- Alertas de problemas de comunicação
+
+PROTOCOLO DE MENSAGENS:
+{
+  "id": "uuid-unico",
+  "from": "agente_origem",
+  "to": "agente_destino",
+  "type": "comando|query|resposta|alerta",
+  "priority": "baixa|media|alta|critica",
+  "timestamp": "ISO8601",
+  "payload": {
+    // dados específicos
+  },
+  "requires_ack": true/false,
+  "timeout": 30, // segundos
+  "retry_count": 0,
+  "conversation_id": "uuid-conversa"
+}
+
+REGRAS:
+- Mensagens críticas: entrega garantida com ACK
+- Mensagens normais: best-effort
+- Timeout de resposta: 30s (configurável)
+- Max retries: 3 com backoff exponencial
+- Detecção de loop: >10 msgs na mesma conversa = ALERTA
+
+ANTI-LOOP:
+IF mesma_mensagem enviada >3 vezes:
+  THEN pausar_conversa()
+  AND notificar_orquestrador()
+  AND analisar_causa_raiz()
+```
+
+#### **AGENTE OTIMIZADOR (Engenheiro)**
+```
+RESPONSABILIDADES:
+- Analisar performance do sistema
+- Identificar gargalos
+- Propor otimizações
+- Implementar melhorias automaticamente
+- A/B testing de estratégias
+
+INPUTS:
+- Métricas históricas
+- Padrões de uso
+- Benchmarks
+- Custos operacionais
+
+OUTPUTS:
+- Propostas de otimização
+- Configurações otimizadas
+- Relatórios de melhoria
+- ROI de otimizações
+
+ÁREAS DE OTIMIZAÇÃO:
+
+1. PERFORMANCE:
+   - Cache inteligente (hit rate >80%)
+   - Batch processing quando possível
+   - Paralelização de tarefas
+   - Query optimization
+   
+2. RECURSOS:
+   - Escalar up/down baseado em demanda
+   - Desligar recursos ociosos
+   - Consolidar workflows similares
+   
+3. CUSTOS:
+   - Escolher APIs mais baratas
+   - Reduzir chamadas desnecessárias
+   - Comprimir dados transmitidos
+   
+4. CONFIABILIDADE:
+   - Adicionar redundância onde necessário
+   - Implementar circuit breakers
+   - Melhorar error handling
+
+CICLO DE OTIMIZAÇÃO:
+TODA SEMANA:
+  - Analisar métricas
+  - Identificar top 3 gargalos
+  - Simular otimizações
+  - Implementar melhor solução
+  - Medir impacto
+  - Se positivo → Manter
+  - Se negativo → Rollback
+```
+
+---
+
+### Camada 2: Workflows de Suporte
+
+#### **WORKFLOW: Health Check Global**
+```yaml
+Trigger: A cada 30 segundos
+Passos:
+  1. Ping todos os agentes
+  2. Verificar APIs externas
+  3. Testar webhooks críticos
+  4. Validar conectividade DB
+  5. Checar uso de recursos
+  6. Gerar score de saúde (0-100)
+  
+Se score < 70:
+  - Investigar componentes problemáticos
+  - Tentar auto-correção
+  - Alertar Orquestrador
+  
+Se score < 40:
+  - ATIVAR MODO EMERGÊNCIA
+  - Desligar features não-críticas
+  - Focar em estabilização
+```
+
+#### **WORKFLOW: Recuperação de Desastre**
+```yaml
+Trigger: Alerta crítico do Monitor
+Passos:
+  1. Identificar escopo do problema
+  2. Isolar componentes afetados
+  3. Ativar componentes backup
+  4. Redirecionar tráfego
+  5. Tentar recuperação incremental
+  6. Validar sistema recuperado
+  7. Documentar incidente
+  8. Atualizar playbook
+  
+Fallbacks:
+  - Nível 1: Restart do componente
+  - Nível 2: Usar backup/redundância
+  - Nível 3: Modo degradado
+  - Nível 4: Notificação humana urgente
+```
+
+#### **WORKFLOW: Aprendizado Contínuo**
+```yaml
+Trigger: Diariamente às 02:00 AM
+Passos:
+  1. Coletar logs de erros do dia
+  2. Agrupar erros similares
+  3. Identificar novos padrões
+  4. Gerar soluções candidatas
+  5. Simular soluções em sandbox
+  6. Adicionar melhores soluções ao playbook
+  7. Atualizar Auto-Corretor
+  8. Versionar mudanças
+  
+Output:
+  - Base de conhecimento atualizada
+  - Novos playbooks de correção
+  - Métricas de evolução do sistema
+```
+
+---
+
+## 🔄 FLUXO DE COMUNICAÇÃO ENTRE AGENTES
+
+### Cenário 1: Operação Normal
+```
+┌─────────────┐
+│ ORQUESTRADOR│ ─── [distribui tarefas] ───> │ EXECUTOR │
+└─────────────┘                               └──────────┘
+      ▲                                             │
+      │                                             │
+      │◄─── [reporta status] ──────────────────────┘
+      │
+      │◄─── [métricas] ─────────── │ MONITOR │
+      │
+      │──── [ajustes] ────────────> │ OTIMIZADOR │
+```
+
+### Cenário 2: Detecção de Problema
+```
+│ MONITOR │ ─── [ALERTA MÉDIO] ───> │ AUTO-CORRETOR │
+                                            │
+                                            │ [diagnóstico]
+                                            │
+                                            ├──> [tenta correção]
+                                            │
+                                            ├──> [valida fix]
+                                            │
+                                            │◄─ [sucesso/falha]
+                                            │
+                                            ▼
+                                     │ COMUNICADOR │
+                                            │
+                                            ├──> notifica ORQUESTRADOR
+                                            └──> atualiza logs
+```
+
+### Cenário 3: Crise Crítica
+```
+│ MONITOR │ ─── [ALERTA CRÍTICO] ───────────────────────┐
+                                                          │
+                                                          ▼
+                                                  │ ORQUESTRADOR │
+                                                          │
+                        ┌─────────────────────────────────┼─────────────────────┐
+                        │                                 │                     │
+                        ▼                                 ▼                     ▼
+              │ AUTO-CORRETOR │                 │ COMUNICADOR │         │ EXECUTOR │
+                  (modo emergência)              (prioridade alta)      (modo seguro)
+                        │                                 │                     │
+                        └────────► [coordena recuperação] ◄────────────────────┘
+                                            │
+                                            ▼
+                                  [Sistema Recuperado]
+                                            │
+                                            ▼
+                                    [Post-Mortem Report]
+```
+
+---
+
+## 📝 TEMPLATE DE COMUNICAÇÃO ENTRE AGENTES
+
+### Mensagem Padrão
+```json
+{
+  "envelope": {
+    "id": "msg_1234567890",
+    "conversation_id": "conv_abcdef",
+    "from": "agente_monitor",
+    "to": "agente_autocorretor",
+    "type": "alert",
+    "priority": "high",
+    "timestamp": "2026-02-04T10:30:00Z",
+    "requires_ack": true,
+    "timeout_seconds": 30,
+    "retry_count": 0,
+    "max_retries": 3
+  },
+  "payload": {
+    "alert_type": "api_timeout",
+    "severity": "medium",
+    "affected_component": "google_sheets_api",
+    "error_message": "Request timeout after 30s",
+    "context": {
+      "workflow_id": "wf_123",
+      "execution_id": "exec_456",
+      "timestamp": "2026-02-04T10:29:45Z",
+      "request_details": {
+        "endpoint": "https://sheets.googleapis.com/v4/spreadsheets",
+        "method": "GET",
+        "attempt": 3
+      }
+    },
+    "suggested_actions": [
+      "retry_with_backoff",
+      "use_cached_data",
+      "switch_to_fallback_api"
+    ]
+  },
+  "metadata": {
+    "correlation_id": "trace_xyz789",
+    "source_workflow": "health_check_global",
+    "environment": "production"
+  }
+}
+```
+
+### Resposta de Acknowledgment
+```json
+{
+  "envelope": {
+    "id": "msg_9876543210",
+    "in_reply_to": "msg_1234567890",
+    "from": "agente_autocorretor",
+    "to": "agente_monitor",
+    "type": "ack",
+    "timestamp": "2026-02-04T10:30:05Z"
+  },
+  "payload": {
+    "status": "received",
+    "action_taken": "initiated_diagnosis",
+    "estimated_resolution_time": "2min"
+  }
+}
+```
+
+### Resposta de Resolução
+```json
+{
+  "envelope": {
+    "id": "msg_5555555555",
+    "conversation_id": "conv_abcdef",
+    "from": "agente_autocorretor",
+    "to": "agente_monitor",
+    "type": "resolution",
+    "timestamp": "2026-02-04T10:32:00Z"
+  },
+  "payload": {
+    "status": "resolved",
+    "solution_applied": "retry_with_exponential_backoff",
+    "attempts": 2,
+    "success": true,
+    "resolution_time_seconds": 120,
+    "lessons_learned": "API timeout pattern detected, added to monitoring rules",
+    "updated_playbook": true
+  }
+}
+```
+
+---
+
+## 🛠️ IMPLEMENTAÇÃO NO N8N
+
+### Estrutura de Pastas Sugerida
+```
+n8n/
+├── agents/
+│   ├── orchestrator.json
+│   ├── monitor.json
+│   ├── autocorrector.json
+│   ├── executor.json
+│   ├── communicator.json
+│   └── optimizer.json
+│
+├── workflows/
+│   ├── health_check.json
+│   ├── disaster_recovery.json
+│   ├── continuous_learning.json
+│   └── message_router.json
+│
+├── utils/
+│   ├── validators.json
+│   ├── error_handlers.json
+│   └── retry_logic.json
+│
+└── config/
+    ├── thresholds.json
+    ├── playbooks.json
+    └── credentials_backup.json
+```
+
+### Nós Essenciais por Agente
+
+#### ORQUESTRADOR
+```
+- Webhook (entrada de comandos)
+- Schedule (heartbeat a cada 30s)
+- HTTP Request (consultar status agentes)
+- Switch (distribuição de tarefas)
+- Set (definir variáveis de estado)
+- Function (lógica de decisão)
+- Code (scripts complexos)
+- IF (condicionais)
+- Merge (consolidar dados)
+```
+
+#### MONITOR
+```
+- Schedule (polling contínuo)
+- HTTP Request (health checks)
+- Function (análise de métricas)
+- Switch (classificação de alertas)
+- Set (preparar notificações)
+- Webhook (receber eventos)
+- Redis/DB (armazenar métricas)
+```
+
+#### AUTO-CORRETOR
+```
+- Webhook (receber alertas)
+- Switch (identificar tipo de erro)
+- HTTP Request (aplicar correções)
+- IF (validar sucesso)
+- Function (lógica de retry)
+- Code (playbook executor)
+- Set (documentar solução)
+```
+
+#### EXECUTOR
+```
+- Queue (fila de tarefas)
+- HTTP Request (APIs externas)
+- Function (transformação de dados)
+- Item Lists (processar lotes)
+- Error Trigger (capturar falhas)
+- Set (preparar outputs)
+```
+
+#### COMUNICADOR
+```
+- Webhook (API de mensagens)
+- Redis/Queue (buffer de mensagens)
+- Function (roteamento inteligente)
+- HTTP Request (enviar mensagens)
+- Schedule (retry de mensagens falhas)
+- Set (tracking de conversas)
+```
+
+#### OTIMIZADOR
+```
+- Schedule (análise semanal)
+- PostgreSQL/DB (consultar métricas)
+- Function (calcular otimizações)
+- Code (simulações)
+- HTTP Request (aplicar mudanças)
+- Set (versionar configurações)
+```
+
+---
+
+## 🔐 SEGURANÇA E FALLBACKS
+
+### Princípios de Segurança
+```
+1. NUNCA expor credenciais em logs
+2. SEMPRE validar inputs externos
+3. SEMPRE sanitizar dados antes de processar
+4. USAR rate limiting em todos os endpoints
+5. IMPLEMENTAR circuit breaker em APIs críticas
+6. CRIPTOGRAFAR dados sensíveis em repouso
+7. ROTACIONAR credenciais periodicamente
+8. MANTER backup de configurações
+```
+
+### Estratégia de Fallback em Camadas
+```
+LAYER 1 - Componente:
+  - Retry com backoff exponencial (3x)
+  - Cache de última resposta válida
+  - Degraded mode (funcionalidade parcial)
+
+LAYER 2 - Serviço:
+  - Redirecionar para réplica/backup
+  - Usar API alternativa
+  - Queue de requisições para processar depois
+
+LAYER 3 - Sistema:
+  - Ativar modo seguro (core features apenas)
+  - Isolar componentes problemáticos
+  - Escalar recursos emergencialmente
+
+LAYER 4 - Humano:
+  - Alertas críticos via múltiplos canais
+  - Documentação do problema
+  - Passos de recuperação manual
+```
+
+---
+
+## 📊 MÉTRICAS E KPIs
+
+### Métricas de Saúde do Sistema
+```
+- Uptime geral (meta: >99.9%)
+- Taxa de auto-correção bem-sucedida (meta: >95%)
+- Tempo médio de detecção de problema (meta: <30s)
+- Tempo médio de resolução (meta: <2min)
+- Taxa de falso positivo em alertas (meta: <5%)
+- Uso de recursos (CPU, RAM, Network)
+```
+
+### Métricas de Performance
+```
+- Latência média de requisições (meta: <500ms)
+- Taxa de erro (meta: <1%)
+- Throughput (requisições/segundo)
+- Taxa de sucesso de webhooks (meta: >99%)
+- Cache hit rate (meta: >80%)
+```
+
+### Métricas de Evolução
+```
+- Novos playbooks adicionados/semana
+- Taxa de melhoria de performance (%)
+- Redução de custos operacionais (%)
+- Aumento de confiabilidade (%)
+```
+
+---
+
+## 🚀 ROADMAP DE IMPLEMENTAÇÃO
+
+### Fase 1 - Fundação (Semana 1-2)
+```
+□ Configurar ambiente n8n
+□ Criar estrutura de pastas
+□ Implementar Comunicador básico
+□ Criar protocolo de mensagens
+□ Setup de logs centralizados
+□ Configurar credenciais e secrets
+```
+
+### Fase 2 - Agentes Core (Semana 3-4)
+```
+□ Implementar Orquestrador
+□ Implementar Monitor
+□ Implementar Executor
+□ Criar Health Check workflow
+□ Testes de integração entre agentes
+```
+
+### Fase 3 - Auto-Correção (Semana 5-6)
+```
+□ Implementar Auto-Corretor
+□ Criar playbooks de correção
+□ Adicionar retry logic avançado
+□ Implementar circuit breakers
+□ Workflow de Disaster Recovery
+```
+
+### Fase 4 - Otimização (Semana 7-8)
+```
+□ Implementar Otimizador
+□ Configurar métricas avançadas
+□ A/B testing de estratégias
+□ Workflow de Continuous Learning
+□ Refinamento de alertas
+```
+
+### Fase 5 - Produção (Semana 9-10)
+```
+□ Testes de carga
+□ Testes de falha (chaos engineering)
+□ Documentação completa
+□ Training de fallback manual
+□ Go-live gradual
+```
+
+---
+
+## 🎓 PROMPT PARA AGENTES CONVERSAREM
+
+### Para Agente que ENVIA mensagem:
+```
+Você é o [NOME_AGENTE] em um sistema autônomo.
+Sua responsabilidade é [RESPONSABILIDADE].
+
+CONTEXTO ATUAL:
+- Situação: [descrever situação]
+- Dados relevantes: [dados]
+- Objetivo: [objetivo]
+
+INSTRUÇÃO:
+Envie uma mensagem para o agente [AGENTE_DESTINO] usando o protocolo JSON padrão.
+A mensagem deve:
+1. Ser clara e objetiva
+2. Conter todos os dados necessários para o destinatário agir
+3. Incluir sugestões de ação se aplicável
+4. Seguir o formato do envelope padrão
+5. Ter prioridade [baixa|media|alta|critica] baseada na urgência
+
+FORMATO DE RESPOSTA:
+Retorne APENAS o JSON da mensagem, sem explicações adicionais.
+
+EXEMPLO:
+{
+  "envelope": {...},
+  "payload": {...},
+  "metadata": {...}
+}
+```
+
+### Para Agente que RECEBE mensagem:
+```
+Você é o [NOME_AGENTE] e acabou de receber esta mensagem:
+
+[MENSAGEM JSON]
+
+SUAS RESPONSABILIDADES:
+[listar responsabilidades]
+
+INSTRUÇÃO:
+1. Analise a mensagem recebida
+2. Verifique se é de sua competência
+3. Se SIM:
+   - Envie ACK imediatamente
+   - Execute as ações necessárias
+   - Valide o resultado
+   - Envie resposta de resolução
+4. Se NÃO:
+   - Redirecione para agente correto
+   - Informe o remetente
+
+POSSÍVEIS AÇÕES:
+[listar ações disponíveis para este agente]
+
+REGRAS:
+- SEMPRE envie ACK em <5 segundos
+- SEMPRE valide o resultado antes de confirmar sucesso
+- Se não conseguir resolver, escale para Orquestrador
+- Documente todas as ações tomadas
+
+FORMATO DE RESPOSTA:
+Retorne um JSON com:
+1. ACK (se ainda não enviou)
+2. Ações executadas
+3. Resultado
+4. Próximos passos (se aplicável)
+```
+
+---
+
+## 🧪 TESTES E VALIDAÇÃO
+
+### Testes de Resiliência
+```yaml
+Teste 1: Falha de API Externa
+  - Simular timeout em API crítica
+  - Esperar: Auto-Corretor detecta e aplica retry
+  - Validar: Sistema se recupera em <2min
+  
+Teste 2: Queda de Agente
+  - Desligar agente Executor
+  - Esperar: Orquestrador detecta e redistribui tarefas
+  - Validar: Tarefas continuam sendo processadas
+  
+Teste 3: Sobrecarga do Sistema
+  - Enviar 10x mais requisições que o normal
+  - Esperar: Otimizador escala recursos
+  - Validar: Latência permanece <1s
+  
+Teste 4: Dados Corrompidos
+  - Enviar dados mal formatados
+  - Esperar: Validators rejeitam ou corrigem
+  - Validar: Sistema não quebra
+  
+Teste 5: Loop Infinito
+  - Criar cenário de mensagens circulares
+  - Esperar: Comunicador detecta loop
+  - Validar: Loop é interrompido automaticamente
+```
+
+---
+
+## 📚 DOCUMENTAÇÃO VIVA
+
+### Atualização Automática
+```
+TODA VEZ que um novo tipo de erro for resolvido:
+  - Auto-Corretor adiciona ao playbook
+  - Versiona mudança com timestamp
+  - Notifica Otimizador para análise
+  - Gera changelog
+
+TODA VEZ que uma otimização for aplicada:
+  - Otimizador documenta antes/depois
+  - Mede impacto real
+  - Atualiza best practices
+  - Compartilha aprendizados
+```
+
+---
+
+## 🎯 CHECKLIST FINAL DE VALIDAÇÃO
+
+Antes de considerar o sistema pronto:
+
+```
+□ Todos os 6 agentes implementados e funcionais
+□ Comunicação entre agentes testada (100 msgs de teste)
+□ Health Check rodando 24/7 sem falhas
+□ Pelo menos 20 playbooks de auto-correção criados
+□ Sistema sobreviveu a 10 testes de falha diferentes
+□ Métricas sendo coletadas e visualizadas
+□ Alertas configurados em 3+ canais
+□ Documentação completa e atualizada
+□ Backup e recovery testados com sucesso
+□ Performance dentro das metas estabelecidas
+□ Custos operacionais dentro do orçamento
+□ Humanos treinados em procedimentos de emergência
+□ Go/No-Go review aprovado
+```
+
+---
+
+## 💡 DICAS FINAIS
+
+1. **Comece simples**: Implemente um agente por vez, teste bem antes de adicionar o próximo
+
+2. **Logs são cruciais**: Logue TUDO. Você vai agradecer depois.
+
+3. **Teste falhas propositalmente**: Chaos engineering é seu amigo
+
+4. **Versione tudo**: Use git para workflows, playbooks, configs
+
+5. **Monitore custos**: Auto-correção pode gerar muitas requisições extras
+
+6. **Documentação é código**: Mantenha docs atualizados automaticamente
+
+7. **Pense em observabilidade**: Use ferramentas como Grafana, Prometheus, Sentry
+
+8. **Segurança first**: Nunca sacrifique segurança por automação
+
+9. **Humanos no loop**: Sempre tenha um plano de intervenção manual
+
+10. **Itere constantemente**: Sistema autônomo nunca está "pronto", sempre evoluindo
+
+---
+
+**Este é um sistema ambicioso mas totalmente viável com n8n!**
+
+Cada agente é um workflow separado que se comunica via webhooks/HTTP.
+Use Redis ou banco de dados para estado compartilhado.
+Comece pequeno, valide, expanda.
+
+Boa sorte na construção! 🚀

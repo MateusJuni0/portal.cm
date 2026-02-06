@@ -1,0 +1,5 @@
+# Monitor de Saúde do Lúcio e Dante
+* * * * * pgrep -f openclaw || systemctl start lucio
+* * * * * echo $(date +%s) > /root/pulso_lucio.txt
+*/15 * * * * /root/cerebro/ferramentas/watchdog_dante.sh
+0 4 * * * /root/cerebro/ferramentas/backup_diario.sh
