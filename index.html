@@ -1,215 +1,322 @@
 <!DOCTYPE html>
-<html lang="pt-PT" class="scroll-smooth">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visão de Deus | CMTecnologia</title>
+    <title>Visão de Deus | Acesso</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
-        
         body {
+            background-color: #020205;
+            color: #fff;
             font-family: 'Inter', sans-serif;
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
+            overflow: hidden;
             margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* MATRIX / RAIN EFFECT CANVAS */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* 1. MATRIX RAIN CANVAS */
+        #matrix-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        /* 2. THE GLASS BOX */
+        .glass-box {
+            position: relative;
+            z-index: 10;
+            background: rgba(18, 18, 28, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
             width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.4;
+            max-width: 400px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            overflow: hidden; /* Mantém a eletricidade dentro/bordas */
+        }
+
+        /* 3. ELECTRICITY EFFECT (HOVER) */
+        .glass-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, #2563eb, #00ffff, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
             pointer-events: none;
         }
 
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .glass-strong {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .glass-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.4), inset 0 0 20px rgba(37, 99, 235, 0.1);
+            border-color: rgba(37, 99, 235, 0.5);
         }
 
-        .text-gradient-blue {
-            background: linear-gradient(to right, #60a5fa, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .glass-box:hover::before {
+            opacity: 1;
+            animation: electricity-spin 2s linear infinite;
         }
 
-        /* Animations */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+        @keyframes electricity-spin {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
         }
-        .animate-float { animation: float 6s ease-in-out infinite; }
 
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(2); opacity: 0; }
+        /* 4. THE ROBOT (CSS ONLY) */
+        .robot-container {
+            width: 80px;
+            height: 80px;
+            margin: -80px auto 20px auto; /* Flutua acima */
+            position: relative;
+            transition: all 0.3s ease;
         }
-        .pulse-dot::before {
+
+        .robot-head {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, #4a5568, #1a202c);
+            border-radius: 24px;
+            border: 2px solid #4a5568;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .robot-eye-visor {
+            width: 60%;
+            height: 20px;
+            background: #000;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+        }
+
+        .robot-pupil {
+            width: 12px;
+            height: 12px;
+            background: #4ade80; /* Verde Standby */
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #4ade80;
+            transition: all 0.2s ease;
+            animation: blink 4s infinite;
+        }
+
+        /* Robot States */
+        /* Estado: Hover na Box (Acordado/Alerta) */
+        .glass-box:hover .robot-head {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+        .glass-box:hover .robot-pupil {
+            background: #3b82f6; /* Azul Alerta */
+            box-shadow: 0 0 15px #3b82f6;
+            width: 30px; /* Olho abre */
+            height: 6px;
+            border-radius: 4px;
+            animation: none; /* Para de piscar */
+        }
+
+        /* Estado: Digitando (Scanning Data) */
+        .glass-box.typing .robot-head {
+            border-color: #00ffff;
+        }
+        .glass-box.typing .robot-pupil {
+            background: #00ffff; /* Ciano Dados */
+            box-shadow: 0 0 20px #00ffff;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: scan-move 0.5s infinite alternate;
+        }
+
+        @keyframes blink {
+            0%, 95%, 100% { height: 12px; }
+            97% { height: 2px; }
+        }
+
+        @keyframes scan-move {
+            from { left: 10%; }
+            to { left: 90%; }
+        }
+
+        /* 5. INPUT & MAGIC BUTTON */
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .magic-input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 16px;
+            padding-left: 50px; /* Espaço pro ícone */
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .magic-input:focus {
+            background: rgba(0,0,0,0.6);
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .magic-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .magic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+        }
+
+        .magic-btn::after {
             content: '';
             position: absolute;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: inherit;
-            border-radius: 50%;
-            z-index: -1;
-            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+            opacity: 0;
         }
 
-        .iphone-border {
-            box-shadow: 0 0 0 2px #333, 0 0 0 4px #1a1a1a, 0 20px 50px rgba(0,0,0,0.5);
+        .magic-btn:hover::after {
+            left: 100%;
+            opacity: 1;
+            transition: 0.7s;
         }
+
     </style>
 </head>
-<body class="selection:bg-blue-600 selection:text-white">
+<body>
 
-    <!-- Efeito de Chuva Digital / Luzes -->
-    <canvas id="canvas-container"></canvas>
+    <!-- Background Rain -->
+    <canvas id="matrix-canvas"></canvas>
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 top-0 glass-strong">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(37,99,235,0.5)]">V</div>
-                <span class="font-bold tracking-tight text-lg">Visão de Deus.</span>
+    <!-- Login Container -->
+    <div class="glass-box" id="loginBox">
+        
+        <!-- The Robot -->
+        <div class="robot-container">
+            <div class="robot-head">
+                <div class="robot-eye-visor">
+                    <div class="robot-pupil"></div>
+                </div>
             </div>
-            <a href="#" class="glass px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-white hover:text-black transition-all">Acesso Beta</a>
+            <!-- Pescoço -->
+            <div class="w-10 h-4 bg-gray-700 mx-auto -mt-1 rounded-b-lg opacity-80"></div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center pt-32 pb-20">
-        <!-- Glow Central -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
-            <!-- Texto -->
-            <div class="space-y-8 text-center lg:text-left">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-semibold text-blue-400 uppercase tracking-wider">
-                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                    Sistema Online
-                </div>
-                <h1 class="text-5xl lg:text-7xl font-bold tracking-tight leading-tight">
-                    Sua casa no <br>
-                    <span class="text-gradient-blue">piloto automático.</span>
-                </h1>
-                <p class="text-xl text-gray-400 max-w-xl mx-auto lg:mx-0">
-                    A IA que <b>vê o que falta</b>, <b>busca o preço</b> e <b>compra</b>.
-                    <br>Sem listas. Sem esforço.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-                    <button class="bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                        Quero Testar
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mockup iPhone com Animação -->
-            <div class="relative lg:h-[700px] flex items-center justify-center animate-float">
-                <div class="iphone-border bg-black rounded-[50px] p-3 w-[350px] h-[700px] relative z-20">
-                    <div class="bg-gray-900 w-full h-full rounded-[40px] overflow-hidden relative border border-gray-800">
-                        <!-- Imagem da Despensa -->
-                        <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?q=80&w=2080&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Pantry">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-
-                        <!-- AR Tags (Simulação de Visão Computacional) -->
-                        <div class="absolute top-1/4 left-10 glass px-3 py-1.5 rounded-xl flex items-center gap-2 border-l-4 border-green-500 animate-bounce" style="animation-duration: 3s">
-                            <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
-                            <div>
-                                <div class="text-[10px] font-bold text-white">Arroz Tio João</div>
-                                <div class="text-[8px] text-gray-300">5kg • Cheio</div>
-                            </div>
-                        </div>
-
-                        <div class="absolute bottom-1/3 right-8 glass px-3 py-1.5 rounded-xl flex items-center gap-2 border-l-4 border-red-500">
-                            <div class="w-2 h-2 bg-red-500 rounded-full pulse-dot"></div>
-                            <div>
-                                <div class="text-[10px] font-bold text-white">Azeite Gallo</div>
-                                <div class="text-[8px] text-gray-300">Acabando • <span class="text-green-400 font-bold">€4.99</span></div>
-                            </div>
-                        </div>
-
-                        <!-- Chat Assistant -->
-                        <div class="absolute bottom-0 w-full glass rounded-t-[30px] p-6 pb-10">
-                            <div class="flex gap-3 mb-4">
-                                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-xl">🤖</div>
-                                <div class="bg-white/10 rounded-2xl p-3 text-xs text-gray-200">
-                                    <span class="text-blue-400 font-bold block mb-1">Dante (Gestor)</span>
-                                    Chefe, encontrei o azeite em oferta. Posso pedir?
-                                </div>
-                            </div>
-                            <button class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:bg-blue-500 transition-colors">
-                                Sim, comprar agora
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold tracking-tight text-white mb-1" style="font-family: 'Orbitron'">IDENTIFIQUE-SE</h2>
+            <p class="text-xs text-blue-400 uppercase tracking-widest">Protocolo Visão de Deus v2.0</p>
         </div>
-    </section>
+
+        <form onsubmit="event.preventDefault(); alert('Conectando ao N8N...');">
+            <div class="input-group">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">📱</span>
+                <input type="tel" id="phoneInput" class="magic-input" placeholder="+351 912 345 678" autocomplete="off">
+            </div>
+
+            <button type="submit" class="magic-btn">
+                Acessar Sistema
+            </button>
+        </form>
+
+    </div>
 
     <script>
-        // Efeito de "Chuva Digital" / Partículas
-        const canvas = document.getElementById('canvas-container');
+        // === 1. MATRIX RAIN EFFECT ===
+        const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.speed = Math.random() * 0.5 + 0.1;
-                this.size = Math.random() * 2;
-                this.opacity = Math.random() * 0.5;
-            }
-            update() {
-                this.y += this.speed;
-                if (this.y > height) this.y = 0;
-                this.opacity = Math.sin(Date.now() * 0.001 * this.speed) * 0.5 + 0.2;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(100, 150, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+        const chars = '01ABCDEF'; // Binário / Hex
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawRain() {
+            ctx.fillStyle = 'rgba(2, 2, 5, 0.05)'; // Trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0'; // Green original Matrix? No, let's go Blue/Cyan for "Visão de Deus"
+            ctx.fillStyle = '#3b82f6'; // Azul moderno
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
             }
         }
+        setInterval(drawRain, 33);
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-        for (let i = 0; i < 100; i++) particles.push(new Particle());
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
+        // === 2. ROBOT INTERACTION LOGIC ===
+        const loginBox = document.getElementById('loginBox');
+        const phoneInput = document.getElementById('phoneInput');
+
+        // Quando o usuário clica para digitar, o robô entra em modo "SCANNING"
+        phoneInput.addEventListener('focus', () => {
+            loginBox.classList.add('typing');
+        });
+
+        // Quando sai, volta ao normal (ou hover se o mouse estiver em cima)
+        phoneInput.addEventListener('blur', () => {
+            loginBox.classList.remove('typing');
+        });
+
     </script>
 </body>
 </html>
